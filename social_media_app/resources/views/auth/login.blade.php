@@ -3,7 +3,7 @@
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <div class="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto mt-10">
-        <h2 class="text-center text-2xl font-semibold text-gray-700 mb-6">{{ __('Welcome Back!') }}</h2>
+        <h2 class="text-center text-2xl font-semibold text-gray-700 mb-6">{{ __('Welcome!') }}</h2>
 
         <form method="POST" action="{{ route('login') }}">
             @csrf

@@ -11,7 +11,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <!-- Update Profile Information Form -->
             <div class="bg-white p-6 rounded-lg shadow-md">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ __('Update Profile Information') }}</h3>
                 <div class="max-w-xl">
                     @include('profile.partials.update-profile-information-form')
                 </div>
@@ -19,7 +18,6 @@
 
             <!-- Update Password Form -->
             <div class="bg-white p-6 rounded-lg shadow-md">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ __('Update Password') }}</h3>
                 <div class="max-w-xl">
                     @include('profile.partials.update-password-form')
                 </div>
@@ -27,7 +25,6 @@
 
             <!-- Delete User Form -->
             <div class="bg-white p-6 rounded-lg shadow-md">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ __('Delete Account') }}</h3>
                 <div class="max-w-xl">
                     @include('profile.partials.delete-user-form')
                 </div>
