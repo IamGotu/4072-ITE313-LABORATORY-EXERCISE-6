@@ -39,10 +39,10 @@
                 @endif
             </div>
 
-            <div>
-                <x-primary-button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg">
+            <div class="mt-6 text-center">
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg mt-3">
                     {{ __('Sign In') }}
-                </x-primary-button>
+                </button>
             </div>
         </form>
 
