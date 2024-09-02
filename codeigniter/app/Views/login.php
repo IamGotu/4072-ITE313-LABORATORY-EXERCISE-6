@@ -1,40 +1,62 @@
-<div class="container">
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Login-CI Login Registration</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="screen" title="no title">
+  </head>
+  <body>
+
+    <div class="container">
     <div class="row">
-        <div class="col-12 col-sm-8 offest-sm-2 col-md-6 offset-md-3 mt-5 pt-3 pb-3 bg-white from-wrapper">
-            <div class="container">
-                <h3>Login</h3>
-                <hr>
+        <div class="col-md-4 col-md-offset-4">
+            <div class="login-panel panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Please do Login here</h3>
+                </div>
+                <?php
+              $success_msg= $this->session->flashdata('success_msg');
+              $error_msg= $this->session->flashdata('error_msg');
 
-                <?php if (session()->get('success')): ?>
-                    <div class="alert alert-success" role="alert">
-                        <?= session()->get('success') ?>
+                  if($success_msg){
+                    ?>
+                    <div class="alert alert-success">
+                      <?php echo $success_msg; ?>
                     </div>
-                <?php endif; ?>
-
-                <form class="" action="/" method="post">
-
-                    <div class="form-group">
-                        <label for="email">Email address</label>
-                        <input type="email" class="form-control" name="email" id="email" value="<?= set_value('email') ?>">
+                  <?php
+                  }
+                  if($error_msg){
+                    ?>
+                    <div class="alert alert-danger">
+                      <?php echo $error_msg; ?>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" name="password" id="password" value="">
-                    </div>
+                    <?php
+                  }
+                  ?>
 
-                    <div class="row">
-                        <div class="col-12 col-sm-4">
-                            <button type="submit" class="btn btn-primary">Login</button>
-                        </div>
-                        
-                        <div class="col-12 col-sm-8 text-right">
-                            <a href="/register">Don't have an account?</a>
-                        </div>
-                    </div>
+                <div class="panel-body">
+                    <form role="form" method="post" action="<?php echo base_url('user/login_user'); ?>">
+                        <fieldset>
+                            <div class="form-group"  >
+                                <input class="form-control" placeholder="Enter E-mail" name="user_email" type="email" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="Enter Password" name="user_password" type="password" value="">
+                            </div>
 
-                </form>
+
+                                <input class="btn btn-lg btn-success btn-block" type="submit" value="login" name="login" >
+
+                        </fieldset>
+                    </form>
+                <center><b>You are not registered ?</b> <br></b><a href="<?php echo base_url('user'); ?>">Register here</a></center><!--for centered text-->
+
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+
+  </body>
+</html>
