@@ -4,16 +4,23 @@
             <div class="container">
                 <h3>Login</h3>
                 <hr>
+
+                <?php if (session()->get('success')): ?>
+                    <div class="alert alert-success" role="alert">
+                        <?= session()->get('success') ?>
+                    </div>
+                <?php endif; ?>
+
                 <form class="" action="/" method="post">
 
                     <div class="form-group">
                         <label for="email">Email address</label>
-                        <input type="text" class="form-control" name="email" id="email" value="<?= set_value('email') ?>">
+                        <input type="email" class="form-control" name="email" id="email" value="<?= set_value('email') ?>">
                     </div>
                     
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="text" class="form-control" name="password" id="password" value="">
+                        <input type="password" class="form-control" name="password" id="password" value="">
                     </div>
 
                     <div class="row">
@@ -26,7 +33,6 @@
                         </div>
                     </div>
 
-                    </div>
                 </form>
             </div>
         </div>
