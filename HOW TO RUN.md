@@ -24,13 +24,15 @@ HOW TO RUN CODEIGNITER (codeigniter)
 
 3. Start the module Apache and MySQL
 
-4. If MySQL is not starting, open Task Manager
+4. If MySQL module is not starting, open Task Manager
 
-5. End task mysqld
+5. End task mysqld, then start the MySQL module again
 
-6. Move the folder codeigniter to C:\xampp\htdocs
+6. Export the database located at codeigniter/app/Database/codeigniter_database.sql
 
-7. copy paste this to the browser: http://localhost/codeigniter/public/
+7. Move the folder codeigniter to C:\xampp\htdocs
+
+8. copy paste this to the browser: http://localhost/codeigniter/public/
 
 
 HOW TO RUN NODE.JS/ANGULAR.JS (social_media_node)
