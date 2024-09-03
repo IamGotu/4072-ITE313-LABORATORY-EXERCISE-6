@@ -17,3 +17,6 @@ $routes->post('/store', 'User::store'); //route to store data in database
 
 $routes->post('/verifylogin', 'User::verifylogin'); //route to verify login
 
+$routes->get('/profile', 'User::profile'); //route to profile page
+
+$routes->post('/update', 'User::update'); //route to update data of the user
