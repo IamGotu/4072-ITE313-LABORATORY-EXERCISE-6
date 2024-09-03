@@ -214,8 +214,7 @@
                 <button id="menuToggle">&#9776;</button>
             </li>
             <li class="menu-item hidden"><a href="#">Home</a></li>
-            <li class="menu-item hidden"><a href="#">Profile</a>
-            </li>
+            <li class="menu-item hidden"><a href="http://localhost/codeigniter/public/index.php/profile">Profile</a></li>
             <li class="menu-item hidden"><a href="<?= base_url('/logout') ?>">Logout</a></li>
         </ul>
     </div>
