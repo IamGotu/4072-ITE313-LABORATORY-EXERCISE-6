@@ -1,6 +1,6 @@
 HOW TO RUN LARAVEL (social_media_app)
 
-1. Download the code
+1. Download the code from https://github.com/IamGotu/4072-ITE313-LABORATORY-EXERCISE-2
 
 2. Right click the folder social_media_app then Open in Integrated Terminal
 
@@ -18,7 +18,7 @@ HOW TO RUN LARAVEL (social_media_app)
 
 HOW TO RUN CODEIGNITER (codeigniter)
 
-1. Download the code
+1. Download the code from https://github.com/IamGotu/4072-ITE313-LABORATORY-EXERCISE-2
 
 2. Download (https://www.apachefriends.org/index.html) and install xampp 
 
@@ -37,5 +37,5 @@ HOW TO RUN CODEIGNITER (codeigniter)
 
 HOW TO RUN NODE.JS/ANGULAR.JS (social_media_node)
 
-Download the code
+1. Download the code from https://github.com/IamGotu/4072-ITE313-LABORATORY-EXERCISE-2
 
