@@ -28,14 +28,29 @@ HOW TO RUN CODEIGNITER (codeigniter)
 
 5. End task mysqld, then start the MySQL module again
 
-6. Export the database located at codeigniter/app/Database/codeigniter_database.sql
+6. Import the database located at codeigniter/app/Database/codeigniter_database.sql
 
 7. Move the folder codeigniter to C:\xampp\htdocs
 
-8. copy paste this to the browser: http://localhost/codeigniter/public/
+8. Copy/paste this to the browser: http://localhost/codeigniter/public/
 
 
 HOW TO RUN NODE.JS/ANGULAR.JS (social_media_node)
 
 1. Download the code from https://github.com/IamGotu/4072-ITE313-LABORATORY-EXERCISE-2
 
+2. Download (https://www.apachefriends.org/index.html) and install xampp 
+
+3. Start the module Apache and MySQL
+
+4. If MySQL module is not starting, open Task Manager
+
+5. End task mysqld, then start the MySQL module again
+
+6. Import the database located at social_media_node/config/social_media_app.sql
+
+7. Right click the folder social_media_node then Open in Integrated Terminal
+
+8. In the terminal type "node server.js"
+
+7. Copy/paste or run this to the browser: http://localhost:3000/
