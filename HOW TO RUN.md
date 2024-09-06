@@ -22,17 +22,25 @@ HOW TO RUN CODEIGNITER (codeigniter)
 
 2. Download (https://www.apachefriends.org/index.html) and install xampp 
 
-3. Start the module Apache and MySQL
+3. Install intl. extension
 
-4. If MySQL module is not starting, open Task Manager
+4. Then go file explorer to open php.ini located at C:\xampp\php\php.ini
 
-5. End task mysqld, then start the MySQL module again
+5. In the file searcg for ";extension=intl"
 
-6. Import the database located at codeigniter/app/Database/codeigniter_database.sql
+6. Remove the ";" and save it as "extension=intl"
 
-7. Move the folder codeigniter to C:\xampp\htdocs
+7. Open the xampp and start the module Apache and MySQL
 
-8. Copy/paste this to the browser: http://localhost/codeigniter/public/
+8. If MySQL module is not starting, open Task Manager
+
+9. End task mysqld, then start the MySQL module again
+
+10. Import the database located at codeigniter/app/Database/codeigniter_database.sql
+
+11. Move the folder codeigniter to C:\xampp\htdocs
+
+12. Copy/paste this to the browser: http://localhost/codeigniter/public/
 
 
 HOW TO RUN NODE.JS/ANGULAR.JS (social_media_node)
@@ -48,6 +56,8 @@ HOW TO RUN NODE.JS/ANGULAR.JS (social_media_node)
 5. End task mysqld, then start the MySQL module again
 
 6. Import the database located at social_media_node/config/social_media_app.sql
+
+7. Make sure to download and install nodejs https://nodejs.org/en 
 
 7. Right click the folder social_media_node then Open in Integrated Terminal
 
