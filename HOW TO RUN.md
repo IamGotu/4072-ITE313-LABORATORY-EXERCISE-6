@@ -20,7 +20,7 @@ HOW TO RUN CODEIGNITER (codeigniter)
 
 1. Download the code from https://github.com/IamGotu/4072-ITE313-LABORATORY-EXERCISE-2
 
-2. Download (https://www.apachefriends.org/index.html) and install xampp 
+2. Download xampp here https://www.apachefriends.org/index.html and install it
 
 3. Install intl. extension
 
