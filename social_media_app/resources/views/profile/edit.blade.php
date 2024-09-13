@@ -16,6 +16,13 @@
                 </div>
             </div>
 
+            <!-- Update Profile Information Form -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="max-w-xl">
+                    @include('profile.partials.update-user-email-form')
+                </div>
+            </div>
+
             <!-- Update Password Form -->
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <div class="max-w-xl">
