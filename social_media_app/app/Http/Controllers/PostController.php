@@ -23,11 +23,17 @@ class PostController extends Controller
     }
         
     public function index() {
-        // Simplified query to debug
-        $posts = Post::with(['user', 'comments.user'])->latest()->get();
+        // Ensure 'comments.user' relationship is included
+        $posts = Post::with('user', 'comments.user')->latest()->get(); 
+        
+        foreach ($posts as $post) {
+            // Ensure that the current user's like status is retrieved correctly
+            $post->userHasLiked = $post->likes()->where('user_id', Auth::id())->exists();
+        }
+    
         return response()->json($posts);
     }
-    
+        
     public function destroy($id) {
         // Find the post by ID or fail with a 404 error if not found
         $post = Post::findOrFail($id);

@@ -58,7 +58,24 @@ angular.module('socialApp', [])
                 console.error('Error adding comment:', error);
                 alert('Error adding comment');
             });
-    };    
+    };
+    
+    $scope.deletePost = function(post) {
+        if (confirm('Are you sure you want to delete this post?')) {
+            $http.delete('/posts/' + post.id)
+            .then(function(response) {
+                // Remove the post from the list after deletion
+                var index = $scope.posts.indexOf(post);
+                if (index > -1) {
+                    $scope.posts.splice(index, 1);
+                }
+                alert(response.data.message);
+            }, function(error) {
+                console.error('Error deleting post:', error);
+                alert('Error deleting post');
+            });
+        }
+    };
 
     $scope.getPosts();  // Fetch posts when the controller initializes
 });

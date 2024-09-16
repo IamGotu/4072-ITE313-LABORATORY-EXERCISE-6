@@ -36,6 +36,9 @@
             <button ng-click="likePost(post)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
                 {{ __('Like') }} (@{{ post.likes_count }})
             </button>
+            <button ng-if="post.user_id === {{ Auth::id() }}" ng-click="deletePost(post)" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
+                {{ __('Delete') }}
+            </button>
             <br>
             <br>        
             <form ng-submit="addComment(post)">
@@ -51,6 +54,10 @@
                 <li ng-repeat="comment in post.comments">
                     <small><span class="text-xl font-bold mb-4">@{{ comment.user.name }}</span> on <span>@{{ comment.created_at | date:'medium' }}</span></small>
                     <p class="text-xl font-semibold mb-6">@{{ comment.comment }}</p>
+                    <button ng-if="comment.user_id === {{ Auth::id() }}" ng-click="deletePost(post)" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
+                        {{ __('Delete') }}
+                    </button>
+
                 </li>
             </ul>
         </div>
