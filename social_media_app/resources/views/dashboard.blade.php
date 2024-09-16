@@ -7,16 +7,7 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <div class="text-gray-900 text-center">
-                    <h3 class="text-xl font-semibold mb-4">{{ __("You're logged in!") }}</h3>
-                    <p class="text-gray-600">{{ __('Welcome to your dashboard. Here you can manage your account and view important information.') }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <br>
 
     <div ng-app="socialApp" ng-controller="PostController" class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <form ng-submit="createPost()" class="bg-white p-6 rounded-lg shadow-md">
@@ -33,6 +24,7 @@
             <br>
             <br>
             <p class="text-xl font-semibold mb-4">@{{ post.content }}</p>
+            <br>
             <button ng-click="likePost(post)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
                 {{ __('Like') }} (@{{ post.likes_count }})
             </button>
@@ -53,11 +45,8 @@
             <ul class="mt-2">
                 <li ng-repeat="comment in post.comments">
                     <small><span class="text-xl font-bold mb-4">@{{ comment.user.name }}</span> on <span>@{{ comment.created_at | date:'medium' }}</span></small>
+                    <br>
                     <p class="text-xl font-semibold mb-6">@{{ comment.comment }}</p>
-                    <button ng-if="comment.user_id === {{ Auth::id() }}" ng-click="deletePost(post)" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
-                        {{ __('Delete') }}
-                    </button>
-
                 </li>
             </ul>
         </div>
