@@ -51,11 +51,4 @@
             </ul>
         </div>
     </div>
-
-<meta name="csrf-token" content="{{ csrf_token() }}">
-
-<script>
-    // Set up CSRF token for AJAX requests
-    $http.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-</script>
 </x-app-layout>
