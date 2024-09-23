@@ -10,10 +10,17 @@
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
+                <!-- Dashboard Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-gray-800 hover:text-blue-600">
                         {{ __('Dashboard') }}
+                    </x-nav-link>
+                </div>
+
+                <!-- Notification Links -->
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('notifications')" :active="request()->routeIs('notifications')" class="text-gray-800 hover:text-blue-600">
+                        {{ __('Notifications') }}
                     </x-nav-link>
                 </div>
             </div>
