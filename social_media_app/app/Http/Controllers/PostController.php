@@ -19,19 +19,45 @@ class PostController extends Controller
         $post = new Post();
         $post->content = $request->content;
         $post->user_id = Auth::id();
+        $post->visibility = $request->visibility;
         $post->save();
 
         return response()->json($post, 201);
     }
 
     public function index() {
+        $authUserId = Auth::id();
+    
+        // Fetch posts with user and comments relationships
         $posts = Post::with('user', 'comments.user')->latest()->get();
-
-        foreach ($posts as $post) {
-            $post->userHasLiked = $post->likes()->where('user_id', Auth::id())->exists();
+    
+        // Filter posts based on visibility and user
+        $filteredPosts = $posts->filter(function($post) use ($authUserId) {
+            if ($post->user_id == $authUserId) {
+                // The post belongs to the authenticated user, so they can always see it
+                return true;
+            }
+    
+            switch ($post->visibility) {
+                case 'public':
+                    return true; // Everyone can see public posts
+                case 'friends':
+                    // Check if the authenticated user is a friend of the post owner
+                    return $post->user->friends->contains($authUserId);
+                case 'only_me':
+                    return false; // Only the post owner can see "only me" posts
+                default:
+                    return false; // Default to hidden if visibility is not set properly
+            }
+        });
+    
+        // Add the userHasLiked property for the posts the user has liked
+        foreach ($filteredPosts as $post) {
+            $post->userHasLiked = $post->likes()->where('user_id', $authUserId)->exists();
         }
-
-        return response()->json($posts);
+    
+        // Return the filtered posts
+        return response()->json($filteredPosts);
     }
 
     public function destroy($id) {

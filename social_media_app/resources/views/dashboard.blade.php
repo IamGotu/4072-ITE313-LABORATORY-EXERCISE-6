@@ -12,6 +12,12 @@
     <div ng-app="socialApp" ng-controller="PostController" class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <form ng-submit="createPost()" class="bg-white p-6 rounded-lg shadow-md">
             <textarea ng-model="newPost.content" placeholder="What's on your mind?" required class="w-full"></textarea>
+            <select ng-model="newPost.visibility" class="mt-2 w-full">
+                <option value="public">Public</option>
+                <option value="friends">Friends</option>
+                <option value="only_me">Only Me</option>
+            </select>
+            <br>
             <br>
             <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
                 {{ __('Post') }}
@@ -20,7 +26,11 @@
 
         <!-- Display posts -->
         <div ng-repeat="post in posts" class="bg-white p-6 rounded-lg shadow-md mt-4">
-            <small><span class="text-xl font-bold mb-4">@{{ post.user.name }}</span> on <span>@{{ post.created_at | date:'medium' }}</span></small>
+            <small>
+                <span class="text-xl font-bold mb-4">@{{ post.user.name }}</span> on
+                <span>@{{ post.created_at | date:'medium' }}</span> -
+                <span class="text-gray-600">@{{ post.visibility }}</span>
+            </small>
             <br>
             <br>
             <p class="text-xl font-semibold mb-4">@{{ post.content }}</p>
