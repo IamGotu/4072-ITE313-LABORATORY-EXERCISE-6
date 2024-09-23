@@ -12,18 +12,24 @@ HOW TO RUN LARAVEL (social_media_app)
 
 6. Right click the folder social_media_app then Open in Integrated Terminal
 
-7. In the terminal type "php artisan migrate" to migrate the database
+7. Install NodeJS here: https://nodejs.org/en
 
-8. Inside folder social_media_app find the file ".env.example" and change it to ".env"
+8. Right click the folder social_media_app then Open in Integrated Terminal
 
-9. Right click the folder social_media_app then Open in Integrated Terminal
+9. In the terminal type "npm angular install" to install node module
 
-10. In the terminal type "npm run dev"
+10. In the terminal type "php artisan migrate" to migrate the database
 
-11. Open another terminal
+11. Inside folder social_media_app find the file ".env.example" and change it to ".env"
 
 12. Right click the folder social_media_app then Open in Integrated Terminal
 
-13. In the terminal type "php artisan serve"
+13. In the terminal type "npm run dev"
 
-14. Open the running server or Ctrl+click it
+14. Open another terminal
+
+15. Right click the folder social_media_app then Open in Integrated Terminal
+
+16. In the terminal type "php artisan serve"
+
+17. Open the running server or Ctrl+click it
