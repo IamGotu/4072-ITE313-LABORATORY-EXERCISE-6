@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/posts/{id}', [PostController::class, 'destroy']);
     Route::post('/posts/{post}/like', [PostController::class, 'likePost']);
     Route::post('/posts/{post}/comment', [PostController::class, 'addComment']);
+
+    // Notification routes
+    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications');
 });
 
 // Optional: API routes if needed
