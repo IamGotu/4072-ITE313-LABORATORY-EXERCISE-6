@@ -9,7 +9,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->enum('visibility', ['public', 'only_me', 'friends'])->default('public');
+            $table->enum('visibility', ['Public', 'Only me', 'Friends'])->default('public');
         });
     }
     

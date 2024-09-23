@@ -11,6 +11,11 @@ angular.module('socialApp', [])
     $scope.posts = [];
     $scope.newPost = {};
 
+    $scope.newPost = {
+        content: '',
+        visibility: 'Public' // Pre-select 'Public'
+    };
+
     $scope.getPosts = function() {
         $http.get('/posts')
         .then(function(response) {

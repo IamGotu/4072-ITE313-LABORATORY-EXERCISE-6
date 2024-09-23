@@ -39,12 +39,12 @@ class PostController extends Controller
             }
     
             switch ($post->visibility) {
-                case 'public':
+                case 'Public':
                     return true; // Everyone can see public posts
-                case 'friends':
+                case 'Friends':
                     // Check if the authenticated user is a friend of the post owner
                     return $post->user->friends->contains($authUserId);
-                case 'only_me':
+                case 'Only me':
                     return false; // Only the post owner can see "only me" posts
                 default:
                     return false; // Default to hidden if visibility is not set properly
