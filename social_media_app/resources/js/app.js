@@ -83,4 +83,3 @@ angular.module('socialApp', [])
 angular.module('socialApp').config(function($httpProvider) {
     $httpProvider.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 });
-
