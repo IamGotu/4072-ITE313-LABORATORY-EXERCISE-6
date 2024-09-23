@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts/{post}/comment', [PostController::class, 'addComment']);
 
     // Notification routes
-    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
 });
 
 // Optional: API routes if needed
