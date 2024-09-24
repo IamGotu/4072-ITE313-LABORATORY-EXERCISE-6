@@ -32,6 +32,10 @@ Route::middleware('auth')->group(function () {
 
     // Notification routes
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
+    Route::post('/notifications/mark-as-read/{notificationId}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+    Route::delete('/notifications/delete/{notificationId}', [NotificationController::class, 'destroy'])->name('notifications.delete');
+    Route::delete('/notifications/delete-all-read', [NotificationController::class, 'deleteAllRead'])->name('notifications.deleteAllRead');
 
     // Friends routes
     Route::get('/friends', [FriendController::class, 'index'])->name('friends');
