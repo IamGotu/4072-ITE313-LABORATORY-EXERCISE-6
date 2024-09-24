@@ -45,9 +45,12 @@ class User extends Authenticatable
         ];
     }
 
+    // Define the friends relationship
     public function friends()
     {
-        return $this->hasMany(User::class, 'friendships', 'user_id', 'friend_id');
+        return $this->belongsToMany(User::class, 'friend_user', 'user_id', 'friend_id')
+            ->withPivot('status') // Include the status if you want to use it
+            ->withTimestamps(); // Automatically manage created_at and updated_at
     }
     
     public function comments()
