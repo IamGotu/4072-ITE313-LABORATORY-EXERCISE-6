@@ -10,7 +10,6 @@ class FriendController extends Controller
 {
     public function index()
     {
-        // Get the currently authenticated user
         $user = Auth::user();
         
         // Get suggested friends for the logged-in user
@@ -22,4 +21,36 @@ class FriendController extends Controller
     
         return view('friends', compact('suggestedFriends'));
     }
+
+    public function addFriend(Request $request, $friendId)
+    {
+        $user = Auth::user();
+    
+        // Check if the friend request already exists
+        if ($user->friends()->where('friend_id', $friendId)->exists()) {
+            return redirect()->back()->with('message', 'You are already friends with this user.');
+        }
+    
+        // Create a new friendship
+        $user->friends()->attach($friendId, ['status' => 'pending']); // Set status to 'pending'
+    
+        return redirect()->back()->with('message', 'Friend request sent!');
+    }
+
+    public function cancelFriendRequest($friendId)
+    {
+        $user = Auth::user();
+        
+        // Check if the friend request exists and the status is 'pending'
+        $friendship = $user->friends()->where('friend_id', $friendId)->first();
+
+        if ($friendship && $friendship->pivot->status === 'pending') {
+            // Delete the pending friend request
+            $user->friends()->detach($friendId);
+            return redirect()->back()->with('message', 'Friend request cancelled.');
+        }
+
+        return redirect()->back()->with('error', 'No pending friend request found.');
+    }
+
 }

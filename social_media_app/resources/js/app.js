@@ -9,8 +9,6 @@ Alpine.start();
 angular.module('socialApp', [])
 .controller('PostController', function($scope, $http) {
     $scope.posts = [];
-    $scope.newPost = {};
-
     $scope.newPost = {
         content: '',
         visibility: 'Public' // Pre-select 'Public'
@@ -53,7 +51,7 @@ angular.module('socialApp', [])
                 alert('Error toggling like');
             });
     };
-        
+
     $scope.addComment = function(post) {
         $http.post('/posts/' + post.id + '/comment', { comment: post.newComment })
             .then(function(response) {
@@ -64,7 +62,7 @@ angular.module('socialApp', [])
                 alert('Error adding comment');
             });
     };
-    
+
     $scope.deletePost = function(post) {
         if (confirm('Are you sure you want to delete this post?')) {
             $http.delete('/posts/' + post.id)
@@ -83,8 +81,45 @@ angular.module('socialApp', [])
     };
 
     $scope.getPosts();  // Fetch posts when the controller initializes
+})
+.controller('FriendController', function($scope, $http) {
+    $scope.suggestedFriends = [];
+    $scope.message = '';
+
+    // Function to fetch suggested friends
+    $scope.getSuggestedFriends = function() {
+        $http.get('/friends/suggested')
+            .then(function(response) {
+                $scope.suggestedFriends = response.data; // Store the suggested friends
+            })
+            .catch(function(error) {
+                console.error('Error fetching suggested friends:', error);
+            });
+    };
+
+    // Function to add a friend
+    $scope.addFriend = function(friendId) {
+        $http.post('/friends/add/' + friendId)
+            .then(function(response) {
+                $scope.message = response.data.message; // Display success message
+                $scope.getSuggestedFriends(); // Refresh the list
+            })
+            .catch(function(error) {
+                if (error.status === 409) {
+                    $scope.message = error.data.message; // Handle already friends
+                } else if (error.status === 400) {
+                    $scope.message = error.data.message; // Handle self-friend request
+                } else {
+                    $scope.message = 'An error occurred while sending the friend request.';
+                }
+            });
+    };
+
+    // Fetch suggested friends on load
+    $scope.getSuggestedFriends();
 });
 
+// CSRF Token configuration
 angular.module('socialApp').config(function($httpProvider) {
     $httpProvider.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 });

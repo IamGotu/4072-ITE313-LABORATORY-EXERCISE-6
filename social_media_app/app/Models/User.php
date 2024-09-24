@@ -45,14 +45,31 @@ class User extends Authenticatable
         ];
     }
 
-    // Define the friends relationship
     public function friends()
     {
         return $this->belongsToMany(User::class, 'friend_user', 'user_id', 'friend_id')
-            ->withPivot('status') // Include the status if you want to use it
-            ->withTimestamps(); // Automatically manage created_at and updated_at
+                    ->withPivot('status') // Include the pivot status
+                    ->withTimestamps();
     }
-    
+
+    // Method to get the friend requests received
+    public function friendRequestsReceived()
+    {
+        return $this->belongsToMany(User::class, 'friend_user', 'friend_id', 'user_id')
+                    ->withPivot('status')
+                    ->wherePivot('status', 'pending')
+                    ->withTimestamps();
+    }
+
+    // Method to get the friend requests sent
+    public function friendRequestsSent()
+    {
+        return $this->belongsToMany(User::class, 'friend_user', 'user_id', 'friend_id')
+                    ->withPivot('status')
+                    ->wherePivot('status', 'pending')
+                    ->withTimestamps();
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);

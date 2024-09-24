@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\FriendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,13 @@ Route::middleware('auth')->group(function () {
 
     // Notification routes
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
+
+    // Friends routes
+    Route::get('/friends', [FriendController::class, 'index'])->name('friends');
+    Route::post('/friends/add/{friendId}', [FriendController::class, 'addFriend'])->name('friends.add');
+    Route::post('/friends/cancel/{friendId}', [FriendController::class, 'cancelFriendRequest'])->name('friends.cancel');
+    Route::post('/friends/unfriend/{friendId}', [FriendController::class, 'unfriend'])->name('friends.unfriend');
+    Route::post('/friends/confirm/{requestId}', [FriendController::class, 'confirm'])->name('friends.confirm');
 });
 
 // Optional: API routes if needed

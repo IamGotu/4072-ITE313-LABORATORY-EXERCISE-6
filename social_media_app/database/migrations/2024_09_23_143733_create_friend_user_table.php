@@ -12,6 +12,7 @@ class CreateFriendUserTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('friend_id');
+            $table->enum('status', ['pending', 'confirmed']);
             $table->timestamps();
 
             // Foreign keys
