@@ -17,6 +17,13 @@
                     </x-nav-link>
                 </div>
 
+                <!-- Friends Links -->
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('friends')" :active="request()->routeIs('friends')" class="text-gray-800 hover:text-blue-600">
+                        {{ __('Friends') }}
+                    </x-nav-link>
+                </div>
+
                 <!-- Notification Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('notifications')" :active="request()->routeIs('notifications')" class="text-gray-800 hover:text-blue-600">
