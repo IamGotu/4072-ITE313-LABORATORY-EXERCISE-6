@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\FriendRequestNotification;
 
 class FriendController extends Controller
 {
@@ -34,9 +35,13 @@ class FriendController extends Controller
         // Create a new friendship
         $user->friends()->attach($friendId, ['status' => 'pending']); // Set status to 'pending'
     
+        // Send a notification to the user who receives the friend request
+        $friend = User::findOrFail($friendId);
+        $friend->notify(new FriendRequestNotification($user));
+    
         return redirect()->back()->with('message', 'Friend request sent!');
     }
-
+    
     public function cancelFriendRequest($friendId)
     {
         $user = Auth::user();
