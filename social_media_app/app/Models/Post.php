@@ -29,4 +29,11 @@ class Post extends Model
     {
         return $this->hasMany(Like::class);
     }
+
+    public function friends()
+    {
+        return $this->belongsToMany(User::class, 'friend_user', 'user_id', 'friend_id')
+                    ->where('status', 'confirmed'); // Adjust this as per your actual table and column names
+    }
+
 }

@@ -25,7 +25,8 @@ class PostController extends Controller
         return response()->json($post, 201);
     }
 
-    public function index() {
+    public function index()
+    {
         $authUserId = Auth::id();
     
         // Fetch posts with user and comments relationships
@@ -42,8 +43,8 @@ class PostController extends Controller
                 case 'Public':
                     return true; // Everyone can see public posts
                 case 'Friends':
-                    // Check if the authenticated user is a friend of the post owner
-                    return $post->user->friends->contains($authUserId);
+                    // Check if the authenticated user is a confirmed friend of the post owner
+                    return $post->user->friends()->where('friend_id', $authUserId)->where('status', 'confirmed')->exists();
                 case 'Only me':
                     return false; // Only the post owner can see "only me" posts
                 default:
@@ -59,7 +60,7 @@ class PostController extends Controller
         // Return the filtered posts
         return response()->json($filteredPosts);
     }
-
+    
     public function destroy($id) {
         $post = Post::findOrFail($id);
 
