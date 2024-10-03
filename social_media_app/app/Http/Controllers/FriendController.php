@@ -57,5 +57,4 @@ class FriendController extends Controller
 
         return redirect()->back()->with('error', 'No pending friend request found.');
     }
-
 }
