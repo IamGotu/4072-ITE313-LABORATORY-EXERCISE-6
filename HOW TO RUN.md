@@ -16,18 +16,20 @@ HOW TO RUN LARAVEL (social_media_app)
 
 9. In the terminal located in folder social_media_app type "composer install" to have vendor
 
-10. Inside folder social_media_app find the file ".env.example" and change it to ".env"
+10. In the terminal located in folder social_media_app type "npm install pusher-js"
 
-11. In the terminal located in folder social_media_app type "php artisan migrate" to migrate the database
+11. Inside folder social_media_app find the file ".env.example" and change it to ".env"
 
-12. In the terminal located in folder social_media_app type "npm run dev"
+12. In the terminal located in folder social_media_app type "php artisan migrate" to migrate the database
 
-13. In the terminal located in folder social_media_app type "php artisan serve"
+13. In the terminal located in folder social_media_app type "npm run dev"
 
-14. If it says no application encryption key has been specified.
+14. In the terminal located in folder social_media_app type "php artisan serve"
 
-15. In the terminal located in folder social_media_app type "php artisan key:generate"
+15. If it says no application encryption key has been specified.
 
-16. Then try again in the terminal located in folder social_media_app the "php artisan serve"
+16. In the terminal located in folder social_media_app type "php artisan key:generate"
 
-17. Open the running server or Ctrl+click the following link
+17. Then try again in the terminal located in folder social_media_app the "php artisan serve"
+
+18. Open the running server or Ctrl+click the following link
