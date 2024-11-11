@@ -5,10 +5,14 @@ use App\Http\Controllers\FriendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
-// Public routes
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::check()) {
+        return redirect()->route('dashboard'); // Redirect to dashboard if logged in
+    } else {
+        return redirect()->route('login'); // Redirect to login if not logged in
+    }
 });
 
 // Dashboard route with authentication
