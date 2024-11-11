@@ -29,6 +29,7 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // Validate the incoming request data
         $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
@@ -42,15 +43,16 @@ class RegisteredUserController extends Controller
             'birth_day' => ['required', 'integer', 'between:1,31'],
             'birth_year' => ['required', 'integer', 'between:1900,' . now()->year],
         ]);
-
+    
         // Format the birthdate from the provided month, day, and year
         $birth_date = \Carbon\Carbon::createFromDate(
             $request->birth_year,
             $request->birth_month,
             $request->birth_day
         )->toDateString();
-
-        $user = User::create([
+    
+        // Create the user
+        $userData = [
             'first_name' => $request->first_name,
             'middle_name' => $request->middle_name,
             'last_name' => $request->last_name,
@@ -58,12 +60,21 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'gender' => $request->gender,
-            'pronouns' => $request->pronouns,
             'birth_date' => $birth_date,
-        ]);
-
+        ];
+    
+        // Add pronouns only if gender is 'custom'
+        if ($request->gender === 'custom') {
+            $userData['pronouns'] = $request->pronouns;
+        }
+    
+        // Create the user in the database
+        $user = User::create($userData);
+    
+        // Fire the registered event
         event(new Registered($user));
-
+    
+        // Redirect the user to the dashboard
         return redirect(route('dashboard', absolute: false));
-    }
+    }    
 }
