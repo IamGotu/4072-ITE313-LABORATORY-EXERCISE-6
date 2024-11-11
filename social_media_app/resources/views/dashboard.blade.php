@@ -29,7 +29,7 @@
                         <br>
                         <span class="text-xs text-gray-500">@{{ post.created_at | date:'medium' }} - @{{ post.visibility }}</span>
                     </div>
-                <div>
+                    <div>
                         <!-- Post Content with Dropdown Actions -->
                         <div class="relative" ng-init="post.showDropdown = false">
                             <button ng-click="post.showDropdown = !post.showDropdown" class="text-gray-600 hover:text-gray-800">
@@ -99,7 +99,7 @@
                 <div class="flex justify-between mt-4 border-t-2 border-b-2 pt-4 pb-4">
                     <div class="flex-1 border-r-2 pr-4">
                         <button ng-click="likePost(post)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full text-center">
-                            {{ __('Like') }} (@{{ post.likes_count }})
+                            {{ __('Like') }} @{{ post.likes_count }}
                         </button>
                     </div>
                     <div class="flex-1 pl-4">
@@ -109,17 +109,47 @@
                     </div>
                 </div>
 
-                <!-- View Comments Section -->
+                <!-- Comments Section -->
                 <div ng-if="post.showComments">
+                    <!-- Display Comments -->
                     <ul class="mt-4">
-                        <li ng-repeat="comment in post.comments" class="border-b pb-4 mb-4">
-                            <small><span class="text-lg font-semibold">@{{ comment.user.first_name }} @{{ comment.user.middle_name }} @{{ comment.user.last_name }} @{{ comment.user.suffix }}</span> <br>
-                            <span class="text-xs text-gray-500">@{{ comment.created_at | date:'medium' }}</span></small>
-                            <p class="text-lg font-semibold mt-2">@{{ comment.comment }}</p>
-                            <!-- Reply Button for Each Comment -->
-                            <button ng-click="replyToComment(comment)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-lg mt-2">
-                                {{ __('Reply') }}
-                            </button>
+                        <li ng-repeat="comment in post.comments" class="border-b pb-4 mb-4 rounded-lg p-4 bg-gray-100">
+                            <!-- Comment Header: User Info -->
+                            <div class="flex items-center">
+                                <!-- User's Name -->
+                                <span class="text-sm font-semibold mr-2">
+                                    @{{ comment.user.first_name }} @{{ comment.user.middle_name }} @{{ comment.user.last_name }} @{{ comment.user.suffix }}
+                                </span>
+                            </div>
+
+                            <!-- Comment Text -->
+                            <p class="text-sm mt-2 italic">"@{{ comment.comment }}"</p>
+
+                            <!-- Comment Actions: Date, Like, Reply, Edit, Delete -->
+                            <div class="flex items-center justify mt-2 text-xs text-gray-600">
+                                <!-- Date -->
+                                <span class="mr-4">@{{ comment.created_at | date:'medium' }}</span>
+
+                                <!-- Like Button with Count -->
+                                <button ng-click="likeComment(comment)" class="text-gray-600">
+                                    {{ __('Like') }} @{{ comment.likes_count }}
+                                </button>
+
+                                <!-- Reply Button -->             
+                                <button ng-click="replyToComment(comment)" class="text-gray-600 ml-2">
+                                    {{ __('Reply') }}
+                                </button>
+
+                                <!-- Edit, Delete Buttons (Visible to the user who commented) -->
+                                <div ng-if="comment.user_id === currentUserId" class="space-x-2">
+                                    <button ng-click="editComment(comment)" class="text-gray-600 ml-2">
+                                        {{ __('Edit') }}
+                                    </button>
+                                    <button ng-click="deleteComment(comment)" class="text-gray-600 ml-2">
+                                        {{ __('Delete') }}
+                                    </button>
+                                </div>
+                            </div>
                         </li>
                     </ul>
 
@@ -141,4 +171,8 @@
         </div>
     </div>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script>
+    // Pass the authenticated user's ID to a global JavaScript variable
+    window.currentUserId = @json(auth()->user()->id);
+    </script>
 </x-app-layout>

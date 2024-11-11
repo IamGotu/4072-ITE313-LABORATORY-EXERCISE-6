@@ -18,6 +18,7 @@ app.controller('PostController', function($scope, $http) {
         content: '',
         visibility: 'Public' // Pre-select 'Public'
     };
+    $scope.currentUserId = window.currentUserId;
 
     // Function to fetch posts
     $scope.getPosts = function() {
@@ -136,7 +137,7 @@ app.controller('PostController', function($scope, $http) {
     $scope.closeModal = function() {
         $scope.isModalVisible = false;  // Close the modal by hiding it
     };
-            
+          
     $scope.getPosts();  // Fetch posts when the controller initializes
 });
 
