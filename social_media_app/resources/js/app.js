@@ -30,10 +30,19 @@ app.controller('PostController', function($scope, $http) {
             });
     };
 
+    $scope.cancelEdit = function(post) {
+        // Revert changes by restoring original content and visibility
+        post.content = post.originalContent;
+        post.visibility = post.originalVisibility;
+        post.isEditing = false; // Exit the editing mode
+    };
+    
     // Function to toggle editing mode
     $scope.editPost = function(post) {
+        post.originalContent = post.content;
+        post.originalVisibility = post.visibility;
+        post.showDropdown = false;
         post.isEditing = true;
-        post.showDropdown = false;  // Close the dropdown when editing
     };
 
     $scope.updatePost = function(post) {
@@ -45,7 +54,7 @@ app.controller('PostController', function($scope, $http) {
         }).catch(function(error) {
             console.error("Error updating post:", error);
         });
-    };    
+    };
 
     // Function to create a new post
     $scope.createPost = function() {

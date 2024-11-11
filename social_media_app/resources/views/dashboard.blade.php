@@ -4,11 +4,11 @@
         <div ng-app="socialApp" ng-controller="PostController" class="max-w-2xl mx-auto sm:px-6 lg:px-8">
             <!-- New Post Form -->
             <form ng-submit="createPost()" class="bg-white p-6 rounded-lg shadow-md">
-                <textarea ng-model="newPost.content" class="w-full bg-white p-6 rounded-lg shadow-md" placeholder="What's on your mind?" required></textarea>
+                <textarea ng-model="newPost.content" id="newPostContent" name="newPostContent" class="w-full bg-white p-6 rounded-lg shadow-md" placeholder="What's on your mind?" required></textarea>
 
                 <!-- Wrap select and button in a flex container with justify-between -->
                 <div class="flex justify-between mt-2">
-                    <select ng-model="newPost.visibility" class="w-11/12 rounded-lg">
+                    <select ng-model="newPost.visibility" id="newPostVisibility" name="newPostVisibility" class="w-11/12 rounded-lg">
                         <option value="Public">Public</option>
                         <option value="Friends">Friends</option>
                         <option value="Only me">Only me</option>
@@ -52,14 +52,23 @@
                 <div ng-if="post.isEditing">
                     <form ng-submit="updatePost(post)" class="mt-4">
                         <textarea ng-model="post.content" id="post-content-@{{ post.id }}" name="content" class="w-full p-2 border rounded-md mb-2" required></textarea>
-                        <select ng-model="post.visibility" id="post-visibility-@{{ post.id }}" name="visibility" class="mt-2 w-full rounded-lg">
-                            <option value="Public">Public</option>
-                            <option value="Friends">Friends</option>
-                            <option value="Only me">Only me</option>
-                        </select>
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-4">
-                            {{ __('Update Post') }}
-                        </button>
+                        
+                        <!-- Wrap select and buttons in a flex container with justify-between -->
+                        <div class="flex justify-between mt-2">
+                            <select ng-model="post.visibility" id="post-visibility-@{{ post.id }}" name="visibility" class="w-3/4 rounded-lg py-1 px-2 text-xs" style="margin-right: 10px;">
+                                <option value="Public">Public</option>
+                                <option value="Friends">Friends</option>
+                                <option value="Only me">Only me</option>
+                            </select>
+                            <div class="flex space-x-2">
+                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-lg text-xs">
+                                    {{ __('Update Post') }}
+                                </button>
+                                <button type="button" ng-click="cancelEdit(post)" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded-lg text-xs">
+                                    {{ __('Cancel') }}
+                                </button>
+                            </div>
+                        </div>
                     </form>
                 </div>
 
@@ -69,7 +78,7 @@
                 </div>
 
                 <!-- Like and Comment Buttons -->
-                <div class="flex justify-start space-x-4 mb-4">
+                <div class="flex justify-start space-x-4 mt-4">
                     <button ng-click="likePost(post)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
                         {{ __('Like') }} (@{{ post.likes_count }})
                     </button>
@@ -93,7 +102,7 @@
 
                     <!-- Write a New Comment -->
                     <form ng-submit="addComment(post)" class="mt-4">
-                        <input type="text" ng-model="post.newComment" placeholder="Add a comment" class="w-full p-2 border rounded-md mb-2">
+                        <input type="text" ng-model="post.newComment" id="newCommentInput" name="newComment" placeholder="Add a comment" class="w-full p-2 border rounded-md mb-2">
                         <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
                             {{ __('Post Comment') }}
                         </button>
