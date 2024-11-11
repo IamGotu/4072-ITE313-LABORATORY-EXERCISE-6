@@ -25,6 +25,22 @@ class PostController extends Controller
         return response()->json($post, 201);
     }
 
+    public function update(Request $request, $id)
+    {
+        $post = Post::findOrFail($id);
+    
+        $validated = $request->validate([
+            'content' => 'required|string',
+            'visibility' => 'required|in:Public,Friends,Only me',
+        ]);
+    
+        $post->content = $validated['content'];
+        $post->visibility = $validated['visibility'];
+        $post->save();
+    
+        return response()->json($post);
+    }
+    
     public function index()
     {
         $authUserId = Auth::id();
@@ -61,17 +77,20 @@ class PostController extends Controller
         return response()->json($filteredPosts);
     }
     
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $post = Post::findOrFail($id);
-
+    
+        // Check if the logged-in user is the owner of the post
         if ($post->user_id !== Auth::id()) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
-
+    
+        // Delete the post
         $post->delete();
         return response()->json(['message' => 'Post deleted successfully']);
-    }
-
+    }    
+    
     public function likePost(Post $post)
     {
         $existingLike = $post->likes()->where('user_id', Auth::id())->first();

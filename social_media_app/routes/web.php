@@ -5,10 +5,14 @@ use App\Http\Controllers\FriendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
-// Public routes
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::check()) {
+        return redirect()->route('dashboard'); // Redirect to dashboard if logged in
+    } else {
+        return redirect()->route('login'); // Redirect to login if not logged in
+    }
 });
 
 // Dashboard route with authentication
@@ -29,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/posts/{id}', [PostController::class, 'destroy']);
     Route::post('/posts/{post}/like', [PostController::class, 'likePost']);
     Route::post('/posts/{post}/comment', [PostController::class, 'addComment']);
+    Route::put('/posts/{id}', [PostController::class, 'update']);
 
     // Notification routes
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
