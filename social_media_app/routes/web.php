@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/posts/{id}', [PostController::class, 'destroy']);
     Route::post('/posts/{post}/like', [PostController::class, 'likePost']);
     Route::post('/posts/{post}/comment', [PostController::class, 'addComment']);
+    Route::put('/posts/{id}', [PostController::class, 'update']);
 
     // Notification routes
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');

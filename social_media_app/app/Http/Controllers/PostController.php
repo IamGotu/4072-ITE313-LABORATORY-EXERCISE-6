@@ -25,6 +25,22 @@ class PostController extends Controller
         return response()->json($post, 201);
     }
 
+    public function update(Request $request, $id)
+    {
+        $post = Post::findOrFail($id);
+    
+        $validated = $request->validate([
+            'content' => 'required|string',
+            'visibility' => 'required|in:Public,Friends,Only me',
+        ]);
+    
+        $post->content = $validated['content'];
+        $post->visibility = $validated['visibility'];
+        $post->save();
+    
+        return response()->json($post);
+    }
+    
     public function index()
     {
         $authUserId = Auth::id();
