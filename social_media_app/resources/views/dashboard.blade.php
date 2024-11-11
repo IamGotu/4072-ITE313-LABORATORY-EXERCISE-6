@@ -5,14 +5,19 @@
             <!-- New Post Form -->
             <form ng-submit="createPost()" class="bg-white p-6 rounded-lg shadow-md">
                 <textarea ng-model="newPost.content" class="w-full bg-white p-6 rounded-lg shadow-md" placeholder="What's on your mind?" required></textarea>
-                <select ng-model="newPost.visibility" class="mt-2 w-full rounded-lg">
-                    <option value="Public">Public</option>
-                    <option value="Friends">Friends</option>
-                    <option value="Only me">Only me</option>
-                </select>
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-4">
-                    {{ __('Post') }}
-                </button>
+
+                <!-- Wrap select and button in a flex container with justify-between -->
+                <div class="flex justify-between mt-2">
+                    <select ng-model="newPost.visibility" class="w-11/12 rounded-lg">
+                        <option value="Public">Public</option>
+                        <option value="Friends">Friends</option>
+                        <option value="Only me">Only me</option>
+                    </select>
+                    
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg ml-4">
+                        {{ __('Post') }}
+                    </button>
+                </div>
             </form>
 
             <!-- Display Posts -->
