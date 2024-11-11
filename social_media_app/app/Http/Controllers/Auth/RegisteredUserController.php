@@ -30,20 +30,39 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['nullable', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'suffix' => ['nullable', 'string', 'max:10'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'gender' => ['required', 'string', 'in:male,female,custom'],
+            'pronouns' => ['nullable', 'string', 'in:he/his,she/her,they/them'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'birth_month' => ['required', 'integer', 'between:1,12'],
+            'birth_day' => ['required', 'integer', 'between:1,31'],
+            'birth_year' => ['required', 'integer', 'between:1900,' . now()->year],
         ]);
 
+        // Format the birthdate from the provided month, day, and year
+        $birth_date = \Carbon\Carbon::createFromDate(
+            $request->birth_year,
+            $request->birth_month,
+            $request->birth_day
+        )->toDateString();
+
         $user = User::create([
-            'name' => $request->name,
+            'first_name' => $request->first_name,
+            'middle_name' => $request->middle_name,
+            'last_name' => $request->last_name,
+            'suffix' => $request->suffix,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'gender' => $request->gender,
+            'pronouns' => $request->pronouns,
+            'birth_date' => $birth_date,
         ]);
 
         event(new Registered($user));
-
-        Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
     }
