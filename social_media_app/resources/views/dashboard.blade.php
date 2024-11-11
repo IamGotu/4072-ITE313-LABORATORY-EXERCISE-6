@@ -27,9 +27,9 @@
                     <div>
                         <span class="text-xl font-bold">@{{ post.user.first_name }} @{{ post.user.middle_name }} @{{ post.user.last_name }} @{{ post.user.suffix }}</span>
                         <br>
-                        <span class="text-sm text-gray-500">@{{ post.created_at | date:'medium' }} - @{{ post.visibility }}</span>
+                        <span class="text-xs text-gray-500">@{{ post.created_at | date:'medium' }} - @{{ post.visibility }}</span>
                     </div>
-                    <div>
+                <div>
                         <!-- Post Content with Dropdown Actions -->
                         <div class="relative" ng-init="post.showDropdown = false">
                             <button ng-click="post.showDropdown = !post.showDropdown" class="text-gray-600 hover:text-gray-800">
@@ -113,9 +113,9 @@
                 <div ng-if="post.showComments">
                     <ul class="mt-4">
                         <li ng-repeat="comment in post.comments" class="border-b pb-4 mb-4">
-                            <small><span class="text-xl font-semibold">@{{ comment.user.first_name }} @{{ comment.user.middle_name }} @{{ comment.user.last_name }} @{{ comment.user.suffix }}</span> <br>
-                            <span>@{{ comment.created_at | date:'medium' }}</span></small>
-                            <p class="text-xl font-semibold mt-2">@{{ comment.comment }}</p>
+                            <small><span class="text-lg font-semibold">@{{ comment.user.first_name }} @{{ comment.user.middle_name }} @{{ comment.user.last_name }} @{{ comment.user.suffix }}</span> <br>
+                            <span class="text-xs text-gray-500">@{{ comment.created_at | date:'medium' }}</span></small>
+                            <p class="text-lg font-semibold mt-2">@{{ comment.comment }}</p>
                             <!-- Reply Button for Each Comment -->
                             <button ng-click="replyToComment(comment)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-lg mt-2">
                                 {{ __('Reply') }}
@@ -125,10 +125,14 @@
 
                     <!-- Write a New Comment -->
                     <form ng-submit="addComment(post)" class="mt-4">
-                        <div class="flex justify-between mt-2">
-                            <input type="text" ng-model="post.newComment" id="newCommentInput" name="newComment" placeholder="Add a comment" class="w-11/12 p-2 border rounded-md mb-2">
-                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg ml-4">
-                                {{ __('Post Comment') }}
+                        <div class="flex items-center mt-2">
+                            <!-- Input field with matching height -->
+                            <input type="text" ng-model="post.newComment" id="newCommentInput" name="newComment" placeholder="Add a comment"
+                                class="w-11/12 py-2 px-3 border rounded-md text-sm h-12">
+                            
+                            <!-- Button with matching height -->
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg ml-2 text-xs h-12">
+                                {{ __('Comment') }}
                             </button>
                         </div>
                     </form>
