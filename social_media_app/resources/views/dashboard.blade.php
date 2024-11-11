@@ -48,6 +48,24 @@
                     </div>
                 </div>
 
+                <!-- Modal for Delete Confirmation -->
+                <div ng-if="isModalVisible" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                        <h2 class="text-xl font-bold mb-4">Message</h2>
+                        <p>@{{ modalMessage }}</p>
+                        <div class="mt-4 flex justify-between">
+                            <!-- Confirm Button -->
+                            <button ng-click="confirmDelete()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
+                                Confirm
+                            </button>
+                            <!-- Cancel Button -->
+                            <button ng-click="closeModal()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Editable Post Content -->
                 <div ng-if="post.isEditing">
                     <form ng-submit="updatePost(post)" class="mt-4">
@@ -78,20 +96,25 @@
                 </div>
 
                 <!-- Like and Comment Buttons -->
-                <div class="flex justify-start space-x-4 mt-4">
-                    <button ng-click="likePost(post)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
-                        {{ __('Like') }} (@{{ post.likes_count }})
-                    </button>
-                    <button ng-click="toggleComments(post)" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
-                        {{ __('Comments') }}
-                    </button>
+                <div class="flex justify-between mt-4 border-t-2 border-b-2 pt-4 pb-4">
+                    <div class="flex-1 border-r-2 pr-4">
+                        <button ng-click="likePost(post)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full text-center">
+                            {{ __('Like') }} (@{{ post.likes_count }})
+                        </button>
+                    </div>
+                    <div class="flex-1 pl-4">
+                        <button ng-click="toggleComments(post)" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg w-full text-center">
+                            {{ __('Comments') }}
+                        </button>
+                    </div>
                 </div>
 
                 <!-- View Comments Section -->
                 <div ng-if="post.showComments">
                     <ul class="mt-4">
                         <li ng-repeat="comment in post.comments" class="border-b pb-4 mb-4">
-                            <small><span class="font-semibold">@{{ comment.user.name }}</span> on <span>@{{ comment.created_at | date:'medium' }}</span></small>
+                            <small><span class="text-xl font-semibold">@{{ comment.user.first_name }} @{{ comment.user.middle_name }} @{{ comment.user.last_name }} @{{ comment.user.suffix }}</span> <br>
+                            <span>@{{ comment.created_at | date:'medium' }}</span></small>
                             <p class="text-xl font-semibold mt-2">@{{ comment.comment }}</p>
                             <!-- Reply Button for Each Comment -->
                             <button ng-click="replyToComment(comment)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-lg mt-2">
@@ -102,10 +125,12 @@
 
                     <!-- Write a New Comment -->
                     <form ng-submit="addComment(post)" class="mt-4">
-                        <input type="text" ng-model="post.newComment" id="newCommentInput" name="newComment" placeholder="Add a comment" class="w-full p-2 border rounded-md mb-2">
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
-                            {{ __('Post Comment') }}
-                        </button>
+                        <div class="flex justify-between mt-2">
+                            <input type="text" ng-model="post.newComment" id="newCommentInput" name="newComment" placeholder="Add a comment" class="w-11/12 p-2 border rounded-md mb-2">
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg ml-4">
+                                {{ __('Post Comment') }}
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>

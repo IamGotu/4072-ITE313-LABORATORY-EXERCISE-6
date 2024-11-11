@@ -102,23 +102,41 @@ app.controller('PostController', function($scope, $http) {
             });
     };
 
-    // Function to delete a post
     $scope.deletePost = function(post) {
-        if (confirm('Are you sure you want to delete this post?')) {
-            $http.delete('/posts/' + post.id)
-                .then(function(response) {
-                    var index = $scope.posts.indexOf(post);
-                    if (index > -1) {
-                        $scope.posts.splice(index, 1);
-                    }
-                    alert(response.data.message);
-                }, function(error) {
-                    console.error('Error deleting post:', error);
-                    alert('Error deleting post');
-                });
-        }
+        $scope.modalMessage = "Are you sure you want to delete this post?";
+        $scope.isModalVisible = true;  // This will show the modal
+        $scope.postToDelete = post; // Store post data to delete later
     };
-
+    
+    $scope.confirmDelete = function() {
+        // Get CSRF token from meta tag for the request header
+        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+        // Send DELETE request with CSRF token in headers
+        $http.delete('/posts/' + $scope.postToDelete.id, {
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            }
+        })
+        .then(function(response) {
+            // On success, remove the post from the frontend
+            var index = $scope.posts.indexOf($scope.postToDelete);
+            if (index !== -1) {
+                $scope.posts.splice(index, 1);  // Remove the post from the array
+            }
+            $scope.closeModal(); // Close the modal after deletion
+        })
+        .catch(function(error) {
+            console.error('Error deleting post:', error);
+            // Handle the error if necessary (e.g., show an alert)
+            $scope.closeModal(); // Close the modal even in case of error
+        });
+    };
+    
+    $scope.closeModal = function() {
+        $scope.isModalVisible = false;  // Close the modal by hiding it
+    };
+            
     $scope.getPosts();  // Fetch posts when the controller initializes
 });
 
