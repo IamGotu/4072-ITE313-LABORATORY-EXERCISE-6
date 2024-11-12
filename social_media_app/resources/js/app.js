@@ -132,7 +132,49 @@ app.controller('PostController', function($scope, $http) {
                 console.error('Error adding comment:', error);
                 alert('Error adding comment');
             });
-    };    
+    };
+
+    // Function to edit a comment
+    $scope.editComment = function(comment) {
+        // Set editing mode and save original content
+        comment.isEditing = true;
+        comment.originalContent = comment.comment;
+    };
+
+    // Function to save edited comment
+    $scope.saveComment = function(comment) {
+        $http.put('/comments/' + comment.id, { comment: comment.comment })
+            .then(function(response) {
+                comment.isEditing = false; // Exit editing mode
+            })
+            .catch(function(error) {
+                console.error('Error updating comment:', error);
+                alert('Error updating comment');
+                comment.comment = comment.originalContent; // Revert to original content if save fails
+            });
+    };
+
+    // Function to cancel edit
+    $scope.cancelEditComment = function(comment) {
+        comment.isEditing = false;
+        comment.comment = comment.originalContent; // Revert to original content
+    };
+
+    // Function to delete a comment
+    $scope.deleteComment = function(comment, post) {
+        $http.delete('/comments/' + comment.id)
+            .then(function(response) {
+                // Remove comment from the post's comments array
+                const index = post.comments.indexOf(comment);
+                if (index > -1) {
+                    post.comments.splice(index, 1); // Remove the comment from the array
+                }
+            })
+            .catch(function(error) {
+                console.error('Error deleting comment:', error);
+                alert('Error deleting comment');
+            });
+    };
 
     // Function to delete a post
     $scope.deletePost = function(post) {

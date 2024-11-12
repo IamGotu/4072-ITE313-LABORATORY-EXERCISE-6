@@ -114,32 +114,29 @@
                     <!-- Display Comments -->
                     <ul class="mt-4">
                         <li ng-repeat="comment in post.comments" class="border-b pb-4 mb-4 rounded-lg p-4 bg-gray-100">
-                            <!-- Comment User Info -->
                             <div class="flex items-center">
                                 <span class="text-sm font-semibold mr-2">
                                     @{{ comment.user.first_name }} @{{ comment.user.middle_name }} @{{ comment.user.last_name }} @{{ comment.user.suffix }}
                                 </span>
                             </div>
 
-                            <!-- Comment Text -->
-                            <p class="text-sm mt-2 italic">"@{{ comment.comment }}"</p>
+                            <!-- Comment Editing or Display -->
+                            <div ng-if="comment.isEditing">
+                                <input type="text" ng-model="comment.comment" class="w-full p-2 rounded-lg border mt-2" />
+                                <button ng-click="saveComment(comment)" class="text-blue-600 mt-2">Save</button>
+                                <button ng-click="cancelEditComment(comment)" class="text-gray-600 ml-2 mt-2">Cancel</button>
+                            </div>
+                            <p ng-if="!comment.isEditing" class="text-sm mt-2 italic">"@{{ comment.comment }}"</p>
 
-                            <!-- Comment Actions: Date, Like, Reply, Edit, Delete -->
                             <div class="flex items-center justify mt-2 text-xs text-gray-600">
                                 <span class="mr-4">@{{ comment.created_at | date:'medium' }}</span>
-                                <button ng-click="likeComment(comment)" class="text-gray-600">
-                                @{{ comment.likes_count }} {{ __('Like') }}
-                                </button>
-                                <button ng-click="replyToComment(comment)" class="text-gray-600 ml-2">
-                                    {{ __('Reply') }}
-                                </button>
+                                <button ng-click="likeComment(comment)" class="text-gray-600">@{{ comment.likes_count }} {{ __('Like') }}</button>
+                                <button ng-click="replyToComment(comment)" class="text-gray-600 ml-2">{{ __('Reply') }}</button>
+
+                                <!-- Edit and Delete Buttons for Comment Owner -->
                                 <div ng-if="comment.user_id === currentUserId" class="space-x-2">
-                                    <button ng-click="editComment(comment)" class="text-gray-600 ml-2">
-                                        {{ __('Edit') }}
-                                    </button>
-                                    <button ng-click="deleteComment(comment)" class="text-gray-600 ml-2">
-                                        {{ __('Delete') }}
-                                    </button>
+                                    <button ng-click="editComment(comment)" ng-if="!comment.isEditing" class="text-gray-600 ml-2">{{ __('Edit') }}</button>
+                                    <button ng-click="deleteComment(comment, post)" class="text-gray-600 ml-2">{{ __('Delete') }}</button>
                                 </div>
                             </div>
                         </li>

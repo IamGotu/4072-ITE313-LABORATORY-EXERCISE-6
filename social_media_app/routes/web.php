@@ -28,12 +28,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Post routes
-    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::get('/posts', [PostController::class, 'index']);
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::put('/posts/{id}', [PostController::class, 'update']);
     Route::delete('/posts/{id}', [PostController::class, 'destroy']);
     Route::post('/posts/{post}/like', [PostController::class, 'likePost']);
     Route::post('/posts/{post}/comment', [PostController::class, 'addComment']);
-    Route::put('/posts/{id}', [PostController::class, 'update']);
+    Route::put('/comments/{id}', [PostController::class, 'updateComment']);
+    Route::delete('/comments/{id}', [PostController::class, 'deleteComment']);
 
     // Notification routes
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');

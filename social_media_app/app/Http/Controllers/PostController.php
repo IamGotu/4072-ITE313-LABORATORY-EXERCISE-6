@@ -133,4 +133,40 @@ class PostController extends Controller
     
         return response()->json($comment, 201);
     }
+
+    public function updateComment(Request $request, $id)
+    {
+        // Find the comment by ID and check if the user is the owner
+        $comment = Comment::findOrFail($id);
+
+        if ($comment->user_id !== Auth::id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        // Validate and update the comment
+        $request->validate([
+            'comment' => 'required|string|max:255',
+        ]);
+
+        $comment->comment = $request->comment;
+        $comment->save();
+
+        return response()->json($comment);
+    }
+
+    public function deleteComment($id)
+    {
+        // Find the comment by ID and check if the user is the owner
+        $comment = Comment::findOrFail($id);
+
+        if ($comment->user_id !== Auth::id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        // Delete the comment
+        $comment->delete();
+
+        return response()->json(['message' => 'Comment deleted successfully']);
+    }
+
 }
