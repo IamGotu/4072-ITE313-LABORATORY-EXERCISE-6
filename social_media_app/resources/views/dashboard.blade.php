@@ -100,7 +100,7 @@
                     <div class="flex-1 border-r-2 pr-4">
                         <button ng-click="likePost(post)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full text-center">
                             <!-- Toggle between Like and Unlike -->
-                            @{{ post.userHasLiked ? 'Unlike' : 'Like' }} @{{ post.likes_count }}
+                            @{{ post.userHasLiked ? 'Unlike' : 'Like' }} @{{ post.likes_count > 0 ? post.likes_count : '' }}
                         </button>
                     </div>
 
