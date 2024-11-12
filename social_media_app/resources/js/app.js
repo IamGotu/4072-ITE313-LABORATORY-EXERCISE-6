@@ -12,7 +12,6 @@ app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 }]);
 
-
 app.controller('PostController', function($scope, $http) {
     $scope.posts = [];
     $scope.newPost = {
@@ -87,23 +86,27 @@ app.controller('PostController', function($scope, $http) {
         });
     };
 
-    // Function to like a post
+    // Function to like or unlike a post
     $scope.likePost = function(post) {
+        console.log("Liking/unliking post", post.id);  // Debugging log
+        // Send a POST request to the backend to like or unlike the post
         $http.post('/posts/' + post.id + '/like')
             .then(function(response) {
+                console.log(response);  // Log response for debugging
                 if (response.data.message === 'Post liked') {
-                    post.likes_count++;  // Increment likes count when liked
-                    post.userHasLiked = true;
+                    post.likes_count++;  // Increment the like count
+                    post.userHasLiked = true;  // Set userHasLiked to true
                 } else if (response.data.message === 'Post unliked') {
-                    post.likes_count--;  // Decrement likes count when unliked
-                    post.userHasLiked = false;
+                    post.likes_count--;  // Decrement the like count
+                    post.userHasLiked = false;  // Set userHasLiked to false
                 }
             }, function(error) {
+                // Handle any error in liking/unliking
                 console.error('Error toggling like:', error);
                 alert('Error toggling like');
             });
     };
-    
+
     // Function to toggle visibility of the comments section
     $scope.toggleComments = function(post) {
         post.showComments = !post.showComments; // Toggle visibility

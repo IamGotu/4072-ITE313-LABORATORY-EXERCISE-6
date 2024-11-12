@@ -100,21 +100,23 @@ class PostController extends Controller
         $existingLike = $post->likes()->where('user_id', Auth::id())->first();
     
         if ($existingLike) {
+            // If the user already liked the post, unlike it
             $existingLike->delete();
-            $post->decrement('likes_count');
+            $post->decrement('likes_count');  // Decrease the like count
             return response()->json(['message' => 'Post unliked']);
         } else {
+            // If the user hasn't liked the post, like it
             $post->likes()->create(['user_id' => Auth::id()]);
-            $post->increment('likes_count');
+            $post->increment('likes_count');  // Increase the like count
     
-            // Notify the post owner
+            // Optionally notify the post owner
             $liker = Auth::user(); // Get the current user who liked the post
             $post->user->notify(new PostLikedNotification($post, $liker));
     
             return response()->json(['message' => 'Post liked']);
         }
     }
-    
+        
     public function addComment(Request $request, Post $post)
     {
         $request->validate([

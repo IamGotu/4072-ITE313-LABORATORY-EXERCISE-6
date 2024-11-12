@@ -99,9 +99,11 @@
                 <div class="flex justify-between mt-4 border-t-2 border-b-2 pt-4 pb-4">
                     <div class="flex-1 border-r-2 pr-4">
                         <button ng-click="likePost(post)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg w-full text-center">
-                            {{ __('Like') }} @{{ post.likes_count }}
+                            <!-- Toggle between Like and Unlike -->
+                            @{{ post.userHasLiked ? 'Unlike' : 'Like' }} @{{ post.likes_count }}
                         </button>
                     </div>
+
                     <div class="flex-1 pl-4">
                         <button ng-click="toggleComments(post)" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg w-full text-center">
                             {{ __('Comments') }}
@@ -130,9 +132,6 @@
 
                             <div class="flex items-center justify mt-2 text-xs text-gray-600">
                                 <span class="mr-4">@{{ comment.created_at | date:'medium' }}</span>
-                                <button ng-click="likeComment(comment)" class="text-gray-600">@{{ comment.likes_count }} {{ __('Like') }}</button>
-                                <button ng-click="replyToComment(comment)" class="text-gray-600 ml-2">{{ __('Reply') }}</button>
-
                                 <!-- Edit and Delete Buttons for Comment Owner -->
                                 <div ng-if="comment.user_id === currentUserId" class="space-x-2">
                                     <button ng-click="editComment(comment)" ng-if="!comment.isEditing" class="text-gray-600 ml-2">{{ __('Edit') }}</button>
