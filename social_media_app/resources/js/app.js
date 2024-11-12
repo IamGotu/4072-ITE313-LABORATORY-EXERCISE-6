@@ -47,6 +47,11 @@ app.controller('PostController', function($scope, $http) {
                     last_name: $scope.currentUser.lastName,
                     suffix: $scope.currentUser.suffix
                 };
+
+                // Ensure likes_count is initialized
+                response.data.likes_count = response.data.likes_count || '';  // Initialize if not present
+
+                // Add user data along with the post
                 $scope.posts.unshift(response.data);
                 $scope.newPost = {};
             }, function(error) {
@@ -87,10 +92,10 @@ app.controller('PostController', function($scope, $http) {
         $http.post('/posts/' + post.id + '/like')
             .then(function(response) {
                 if (response.data.message === 'Post liked') {
-                    post.likes_count++;
+                    post.likes_count++;  // Increment likes count when liked
                     post.userHasLiked = true;
                 } else if (response.data.message === 'Post unliked') {
-                    post.likes_count--;
+                    post.likes_count--;  // Decrement likes count when unliked
                     post.userHasLiked = false;
                 }
             }, function(error) {
@@ -98,7 +103,7 @@ app.controller('PostController', function($scope, $http) {
                 alert('Error toggling like');
             });
     };
-
+    
     // Function to toggle visibility of the comments section
     $scope.toggleComments = function(post) {
         post.showComments = !post.showComments; // Toggle visibility
