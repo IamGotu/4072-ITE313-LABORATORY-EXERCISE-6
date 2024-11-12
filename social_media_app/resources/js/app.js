@@ -112,13 +112,22 @@ app.controller('PostController', function($scope, $http) {
                 if (!post.comments) {
                     post.comments = [];
                 }
+                
+                // Add user data along with the comment
+                response.data.user = {
+                    first_name: $scope.currentUser.firstName,
+                    middle_name: $scope.currentUser.middleName,
+                    last_name: $scope.currentUser.lastName,
+                    suffix: $scope.currentUser.suffix
+                };
+                
                 post.comments.push(response.data); // Add the new comment to the post's comments array
                 post.newComment = ''; // Clear the input field
             }, function(error) {
                 console.error('Error adding comment:', error);
                 alert('Error adding comment');
             });
-    };
+    };    
 
     // Function to delete a post
     $scope.deletePost = function(post) {

@@ -114,7 +114,7 @@
                     <!-- Display Comments -->
                     <ul class="mt-4">
                         <li ng-repeat="comment in post.comments" class="border-b pb-4 mb-4 rounded-lg p-4 bg-gray-100">
-                            <!-- Comment Header: User Info -->
+                            <!-- Comment User Info -->
                             <div class="flex items-center">
                                 <span class="text-sm font-semibold mr-2">
                                     @{{ comment.user.first_name }} @{{ comment.user.middle_name }} @{{ comment.user.last_name }} @{{ comment.user.suffix }}
