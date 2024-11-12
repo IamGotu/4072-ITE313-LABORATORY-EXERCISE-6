@@ -116,7 +116,6 @@
                         <li ng-repeat="comment in post.comments" class="border-b pb-4 mb-4 rounded-lg p-4 bg-gray-100">
                             <!-- Comment Header: User Info -->
                             <div class="flex items-center">
-                                <!-- User's Name -->
                                 <span class="text-sm font-semibold mr-2">
                                     @{{ comment.user.first_name }} @{{ comment.user.middle_name }} @{{ comment.user.last_name }} @{{ comment.user.suffix }}
                                 </span>
@@ -127,20 +126,13 @@
 
                             <!-- Comment Actions: Date, Like, Reply, Edit, Delete -->
                             <div class="flex items-center justify mt-2 text-xs text-gray-600">
-                                <!-- Date -->
                                 <span class="mr-4">@{{ comment.created_at | date:'medium' }}</span>
-
-                                <!-- Like Button with Count -->
                                 <button ng-click="likeComment(comment)" class="text-gray-600">
                                     {{ __('Like') }} @{{ comment.likes_count }}
                                 </button>
-
-                                <!-- Reply Button -->             
                                 <button ng-click="replyToComment(comment)" class="text-gray-600 ml-2">
                                     {{ __('Reply') }}
                                 </button>
-
-                                <!-- Edit, Delete Buttons (Visible to the user who commented) -->
                                 <div ng-if="comment.user_id === currentUserId" class="space-x-2">
                                     <button ng-click="editComment(comment)" class="text-gray-600 ml-2">
                                         {{ __('Edit') }}
