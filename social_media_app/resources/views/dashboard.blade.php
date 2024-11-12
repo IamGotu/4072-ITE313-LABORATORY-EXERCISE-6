@@ -30,8 +30,8 @@
                         <span class="text-xs text-gray-500">@{{ post.created_at | date:'medium' }} - @{{ post.visibility }}</span>
                     </div>
                     <div>
-                        <!-- Post Content with Dropdown Actions -->
-                        <div class="relative" ng-init="post.showDropdown = false">
+                        <!-- Only show the dropdown for editing/deleting if the current user is the author -->
+                        <div ng-if="post.user_id === currentUserId" class="relative" ng-init="post.showDropdown = false">
                             <button ng-click="post.showDropdown = !post.showDropdown" class="text-gray-600 hover:text-gray-800">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -128,7 +128,7 @@
                             <div class="flex items-center justify mt-2 text-xs text-gray-600">
                                 <span class="mr-4">@{{ comment.created_at | date:'medium' }}</span>
                                 <button ng-click="likeComment(comment)" class="text-gray-600">
-                                    {{ __('Like') }} @{{ comment.likes_count }}
+                                @{{ comment.likes_count }} {{ __('Like') }}
                                 </button>
                                 <button ng-click="replyToComment(comment)" class="text-gray-600 ml-2">
                                     {{ __('Reply') }}
