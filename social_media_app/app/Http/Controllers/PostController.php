@@ -11,19 +11,23 @@ use App\Notifications\CommentAddedNotification;
 
 class PostController extends Controller
 {
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
+        // Validate the incoming data
         $request->validate([
-            'content' => 'required|max:255',
+            'content' => 'required|string',
+            'visibility' => 'required|string'
         ]);
-
-        $post = new Post();
-        $post->content = $request->content;
-        $post->user_id = Auth::id();
-        $post->visibility = $request->visibility;
-        $post->save();
-
+    
+        // Save the post data to the database
+        $post = Post::create([
+            'content' => $request->content,
+            'visibility' => $request->visibility,
+            'user_id' => auth()->id(),
+        ]);
+    
         return response()->json($post, 201);
-    }
+    }         
 
     public function update(Request $request, $id)
     {

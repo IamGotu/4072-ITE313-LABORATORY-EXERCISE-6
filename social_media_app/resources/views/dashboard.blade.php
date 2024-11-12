@@ -174,5 +174,12 @@
     <script>
     // Pass the authenticated user's ID to a global JavaScript variable
     window.currentUserId = @json(auth()->user()->id);
+
+    window.currentUser = {
+        firstName: "{{ auth()->user()->first_name }}",
+        middleName: "{{ auth()->user()->middle_name }}",
+        lastName: "{{ auth()->user()->last_name }}",
+        suffix: "{{ auth()->user()->suffix }}"
+    };
     </script>
 </x-app-layout>

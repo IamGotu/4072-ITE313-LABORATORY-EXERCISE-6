@@ -19,6 +19,7 @@ app.controller('PostController', function($scope, $http) {
         visibility: 'Public' // Pre-select 'Public'
     };
     $scope.currentUserId = window.currentUserId;
+    $scope.currentUser = window.currentUser;
 
     // Function to fetch posts
     $scope.getPosts = function() {
@@ -61,14 +62,20 @@ app.controller('PostController', function($scope, $http) {
     $scope.createPost = function() {
         $http.post('/posts', $scope.newPost)
             .then(function(response) {
+                response.data.user = {
+                    first_name: $scope.currentUser.firstName,
+                    middle_name: $scope.currentUser.middleName,
+                    last_name: $scope.currentUser.lastName,
+                    suffix: $scope.currentUser.suffix
+                };
                 $scope.posts.unshift(response.data);
-                $scope.newPost = {}; // Clear form
+                $scope.newPost = {};
             }, function(error) {
                 console.error('Error creating post:', error);
                 alert('Error creating post');
             });
-    };
-
+    };    
+    
     // Function to toggle visibility of the comments section
     $scope.toggleComments = function(post) {
         post.showComments = !post.showComments; // Toggle visibility
@@ -110,15 +117,8 @@ app.controller('PostController', function($scope, $http) {
     };
     
     $scope.confirmDelete = function() {
-        // Get CSRF token from meta tag for the request header
-        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        
         // Send DELETE request with CSRF token in headers
-        $http.delete('/posts/' + $scope.postToDelete.id, {
-            headers: {
-                'X-CSRF-TOKEN': csrfToken
-            }
-        })
+        $http.delete('/posts/' + $scope.postToDelete.id)
         .then(function(response) {
             // On success, remove the post from the frontend
             var index = $scope.posts.indexOf($scope.postToDelete);
@@ -129,7 +129,6 @@ app.controller('PostController', function($scope, $http) {
         })
         .catch(function(error) {
             console.error('Error deleting post:', error);
-            // Handle the error if necessary (e.g., show an alert)
             $scope.closeModal(); // Close the modal even in case of error
         });
     };
@@ -176,8 +175,4 @@ app.controller('FriendController', function($scope, $http) {
 
     // Fetch suggested friends on load
     $scope.getSuggestedFriends();
-});
-
-angular.module('socialApp').config(function($httpProvider) {
-    $httpProvider.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 });
