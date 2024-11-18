@@ -46,7 +46,7 @@
                 {{ __('Save') }}
             </x-primary-button>
 
-            @if (session('status') === 'profile-updated')
+            @if (session('status') === 'email-updated')
                 <p
                     x-data="{ show: true }"
                     x-show="show"

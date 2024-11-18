@@ -21,6 +21,8 @@ app.controller('PostController', function($scope, $http) {
     $scope.currentUserId = window.currentUserId;
     $scope.currentUser = window.currentUser;
 
+    const isProfilePage = window.location.pathname.includes("profile");
+
     // Function to fetch posts
     $scope.getPosts = function() {
         $http.get('/posts')
@@ -30,6 +32,9 @@ app.controller('PostController', function($scope, $http) {
                 $scope.posts.forEach(function(post) {
                     post.comments = post.comments || []; // Initialize comments if not present
                 });
+                if (isProfilePage) {
+                    $scope.posts = $scope.posts.filter(post => post.user_id === $scope.currentUserId);
+                }
             }, function(error) {
                 console.error('Error fetching posts:', error);
                 alert('Error fetching posts');
