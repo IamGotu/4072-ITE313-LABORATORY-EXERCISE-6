@@ -88,7 +88,7 @@ class ProfileController extends Controller
         ]);
 
         // Redirect back to the edit profile page
-        return redirect()->route('profile.edit')->with('status', 'profile-updated');
+        return redirect()->route('profile.profile')->with('status', 'profile-updated');
     }
 
     /**
