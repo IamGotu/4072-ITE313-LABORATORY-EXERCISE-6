@@ -25,7 +25,7 @@ class ProfileController extends Controller
         $birthMonth = $birthDate ? $birthDate->month : null;
         $birthDay = $birthDate ? $birthDate->day : null;
     
-        return view('profile.edit', [
+        return view('profile.profile', [
             'user' => $user,
             'birthYear' => $birthYear,
             'birthMonth' => $birthMonth,
@@ -48,7 +48,7 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return Redirect::route('profile.edit')->with('status', 'email-updated');
+        return Redirect::route('profile.profile')->with('status', 'email-updated');
     }
 
     /**
