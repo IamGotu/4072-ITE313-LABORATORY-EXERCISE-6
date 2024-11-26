@@ -19,10 +19,7 @@
                 <ul>
                     @foreach($incomingRequests as $request)
                         <li class="flex justify-between items-center p-4 border-b">
-                            <!-- User Details -->
                             <span class="flex-grow">{{ $request->first_name }} {{ $request->middle_name }} {{ $request->last_name }} {{ $request->suffix }}</span>
-
-                            <!-- Action Buttons -->
                             <div class="flex gap-2">
                                 <form method="POST" action="{{ route('friends.accept', $request->id) }}">
                                     @csrf
@@ -52,7 +49,6 @@
                     @foreach($suggestedFriends as $suggested)
                         <li class="flex justify-between items-center p-2 border-b">
                             <span>{{ $suggested->first_name }} {{ $suggested->middle_name }} {{ $suggested->last_name }} {{ $suggested->suffix }}</span>
-
                             <form method="POST" action="{{ route('friends.add', $suggested->id) }}">
                                 @csrf
                                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-2">
@@ -63,6 +59,29 @@
                     @endforeach
                 </ul>
             </div>
+
+            <!-- Friends List -->
+            @if($friends->isNotEmpty())
+                <div class="mt-6">
+                    <h2 class="text-xl font-semibold mb-4">Your Friends</h2>
+                    <ul>
+                        @foreach($friends as $friend)
+                            <li class="flex justify-between items-center p-4 border-b">
+                                <span>{{ $friend->first_name }} {{ $friend->middle_name }} {{ $friend->last_name }} {{ $friend->suffix }}</span>
+                                <form method="POST" action="{{ route('friends.unfriend', $friend->id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                        Unfriend
+                                    </button>
+                                </form>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @else
+                <p>You have no friends yet.</p>
+            @endif
         </div>
     </div>
 </x-app-layout>

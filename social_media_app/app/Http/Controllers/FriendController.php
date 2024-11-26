@@ -13,24 +13,28 @@ class FriendController extends Controller
     public function index()
     {
         $user = Auth::user();
-    
+        
         // Suggested friends (users not already friends or having pending requests)
         $suggestedFriends = User::where('id', '!=', $user->id)
             ->whereDoesntHave('friends', function ($query) use ($user) {
                 $query->where('friend_id', $user->id)
-                    ->orWhere('user_id', $user->id);
+                      ->orWhere('user_id', $user->id);
             })
             ->get();
-    
+        
         // Incoming friend requests (where the logged-in user is the recipient)
         $incomingRequests = $user->friendRequestsReceived;
-    
+        
         // Outgoing friend requests (where the logged-in user is the sender)
         $outgoingRequests = $user->friendRequestsSent;
-    
-        return view('friends', compact('suggestedFriends', 'incomingRequests', 'outgoingRequests'));
+        
+        // Friends (confirmed friendships)
+        $friends = $user->friends()->wherePivot('status', 'confirmed')->get(); // Get confirmed friends
+        
+        // Return the view with all variables
+        return view('friends', compact('suggestedFriends', 'incomingRequests', 'outgoingRequests', 'friends'));
     }
-            
+                
     public function addFriend(Request $request, $friendId)
     {
         $user = Auth::user();
@@ -48,6 +52,22 @@ class FriendController extends Controller
         $friend->notify(new FriendRequestNotification($user));
     
         return redirect()->back()->with('message', 'Friend request sent!');
+    }
+
+    public function unfriend($friendId)
+    {
+        $user = Auth::user();
+        
+        // Check if the user is friends with the given friendId
+        $friendship = $user->friends()->where('friend_id', $friendId)->wherePivot('status', 'confirmed')->first();
+
+        if ($friendship) {
+            // Remove the friend from the relationship
+            $user->friends()->detach($friendId);
+            return redirect()->back()->with('message', 'You have unfriended this user.');
+        }
+
+        return redirect()->back()->with('error', 'Friend not found.');
     }
     
     public function cancelFriendRequest($friendId)
@@ -70,23 +90,32 @@ class FriendController extends Controller
     {
         $user = Auth::user();
         
-        // Find the incoming friend request where the logged-in user is the recipient (friend_id)
+        // Check if the logged-in user has received a pending friend request from the other user
         $friendship = $user->friendRequestsReceived()->where('user_id', $friendId)->wherePivot('status', 'pending')->first();
-        
+    
         if ($friendship) {
-            // Update the status to 'confirmed' (accept the friend request)
+            // Accept the friend request by updating the pivot table's 'status' to 'confirmed'
             $friendship->pivot->update(['status' => 'confirmed']);
             
-            // Optionally, notify the sender that their request was accepted
+            // Also check the outgoing request on the other user's side (to update their view of the relationship)
+            $sentFriendship = $user->friendRequestsSent()->where('friend_id', $friendId)->wherePivot('status', 'pending')->first();
+            
+            // If the outgoing request is found, update the status to 'confirmed'
+            if ($sentFriendship) {
+                $sentFriendship->pivot->update(['status' => 'confirmed']);
+            }
+            
+            // Notify the sender that their request was accepted
             $sender = User::find($friendId);
             $sender->notify(new FriendRequestAcceptedNotification($user));
-            
+    
             return redirect()->back()->with('message', 'Friend request accepted.');
         }
     
+        // If no incoming friend request was found
         return redirect()->back()->with('error', 'Friend request not found.');
-    }
-            
+    }    
+                                
     public function declineFriendRequest($friendId)
     {
         $user = Auth::user();
