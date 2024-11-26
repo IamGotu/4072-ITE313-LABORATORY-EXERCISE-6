@@ -52,7 +52,7 @@ class User extends Authenticatable
     public function friends()
     {
         return $this->belongsToMany(User::class, 'friend_user', 'user_id', 'friend_id')
-                    ->withPivot('status') // Access the pivot column (status)
+                    ->wherePivot('status', 'confirmed')
                     ->withTimestamps();
     }
 
@@ -67,8 +67,8 @@ class User extends Authenticatable
     public function friendRequestsReceived()
     {
         return $this->belongsToMany(User::class, 'friend_user', 'friend_id', 'user_id')
-                    ->withPivot('status')
-                    ->wherePivot('status', 'pending');
+                    ->wherePivot('status', 'pending')
+                    ->withTimestamps();
     }
 
     public function declineFriendRequest($friendId)
