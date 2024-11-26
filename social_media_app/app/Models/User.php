@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
@@ -55,7 +56,7 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
-    // Method to get the friend requests received
+    // Method to get the friend requests received (incoming)
     public function friendRequestsReceived()
     {
         return $this->belongsToMany(User::class, 'friend_user', 'friend_id', 'user_id')
@@ -64,7 +65,7 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
-    // Method to get the friend requests sent
+    // Method to get the friend requests sent (outgoing)
     public function friendRequestsSent()
     {
         return $this->belongsToMany(User::class, 'friend_user', 'user_id', 'friend_id')
@@ -73,6 +74,23 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
+    public function declineFriendRequest($friendId)
+    {
+        $user = Auth::user();
+        
+        // Find the incoming friend request where the logged-in user is the recipient (friend_id)
+        $friendship = $user->friendRequestsReceived()->where('user_id', $friendId)->wherePivot('status', 'pending')->first();
+        
+        if (!$friendship) {
+            return redirect()->back()->with('error', 'Friend request not found.');
+        }
+        
+        // Remove the friend request (decline it)
+        $user->friendRequestsReceived()->detach($friendId);
+        
+        return redirect()->back()->with('message', 'Friend request declined.');
+    }
+        
     public function comments()
     {
         return $this->hasMany(Comment::class);

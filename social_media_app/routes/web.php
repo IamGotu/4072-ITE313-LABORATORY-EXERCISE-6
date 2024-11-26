@@ -49,7 +49,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/friends/add/{friendId}', [FriendController::class, 'addFriend'])->name('friends.add');
     Route::post('/friends/cancel/{friendId}', [FriendController::class, 'cancelFriendRequest'])->name('friends.cancel');
     Route::post('/friends/unfriend/{friendId}', [FriendController::class, 'unfriend'])->name('friends.unfriend');
-    Route::post('/friends/confirm/{requestId}', [FriendController::class, 'confirm'])->name('friends.confirm');
+    Route::post('/friends/accept/{friendId}', [FriendController::class, 'acceptFriend'])->name('friends.accept');
+    Route::delete('/friends/decline/{friendId}', [FriendController::class, 'declineFriendRequest'])->name('friends.decline');
 });
 
 // Optional: API routes if needed
