@@ -1,4 +1,52 @@
 <x-app-layout>
+<style>
+        .message-wrapper {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+            align-items: flex-start; /* Default alignment (left) */
+        }
+
+        .message-wrapper.current-user {
+            align-items: flex-end; /* Align to the right for the current user */
+            text-align: right;
+        }
+
+        .message-wrapper small {
+            font-size: 0.75rem;
+            color: #6b7280; /* Tailwind's gray-500 */
+            margin-bottom: 0.25rem;
+        }
+
+        .message-wrapper .message-content {
+            font-size: 1rem;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .message-wrapper .message-date {
+            font-size: 0.75rem;
+            color: #9ca3af; /* Tailwind's gray-400 */
+        }
+
+        .current-user .message-content {
+            background-color: #bfdbfe; /* Tailwind's blue-100 for current user */
+            align-self: flex-end;
+        }
+
+        .current-user .message-date {
+            text-align: right;
+        }
+
+        .other-user .message-content {
+            background-color: #e5e7eb; /* Tailwind's gray-200 for other users */
+            align-self: flex-start;
+        }
+
+        .other-user .message-date {
+            text-align: left;
+        }
+    </style>
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
@@ -68,7 +116,7 @@
                 <button onclick="closeInboxModal()" class="text-gray-500 hover:text-gray-700">&times;</button>
             </div>
             <div class="max-h-60 overflow-y-auto mb-4"> <!-- Set a max height and enable scrolling for messages -->
-                <ul id="conversationMessages" class="divide-y divide-gray-200">
+                <ul id="conversationMessages" class="max-h-60 overflow-y-auto">
                     <!-- Messages will be appended here -->
                 </ul>
             </div>
@@ -153,14 +201,19 @@
 
                     messages.forEach(message => {
                         const fullName = `${message.sender.first_name} ${message.sender.middle_name || ''} ${message.sender.last_name} ${message.sender.suffix || ''}`.trim();
-                        const senderName = message.sender_id === authUserId ? 'You' : fullName;
+                        const isCurrentUser = message.sender_id === authUserId;
+                        const senderName = isCurrentUser ? 'You' : fullName;
 
                         const messageItem = document.createElement('li');
-                        messageItem.className = 'py-2';
+                        messageItem.className = `message-wrapper ${isCurrentUser ? 'current-user' : 'other-user'}`;
                         messageItem.innerHTML = `
-                            <strong>${senderName}:</strong> 
-                            ${message.content} 
-                            <small class="text-gray-500">${new Date(message.created_at).toLocaleString()}</small>
+                            <small class="text-gray-500">${senderName}</small>
+                            <div class="message-content bg-gray-200 rounded-lg px-3 py-2 inline-block max-w-[80%] ${isCurrentUser ? 'bg-blue-100' : ''}">
+                                ${message.content}
+                            </div>
+                            <div class="message-date text-gray-400 text-xs mt-1">
+                                ${new Date(message.created_at).toLocaleString()}
+                            </div>
                         `;
                         conversationMessages.appendChild(messageItem);
                     });
