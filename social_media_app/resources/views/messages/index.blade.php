@@ -100,6 +100,8 @@
     </div>
 
     <script>
+        const authUserId = {{ Auth::id() }};
+
         let messageIdToDelete;
 
         function openDeleteModal(messageId) {
@@ -139,53 +141,35 @@
         }
 
         function openInboxModal(otherUserId, otherUserName) {
-        document.getElementById('modalUserName').innerText = `Chat with ${otherUserName}`;
-        document.getElementById('replyReceiverId').value = otherUserId;
+            document.getElementById('modalUserName').innerText = `${otherUserName}`;
+            document.getElementById('replyReceiverId').value = otherUserId;
 
-        // Mark the conversation as read
-        fetch(`/messages/conversation/${otherUserId}/read`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token for Laravel
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to mark conversation as read');
-            }
-            return response.json(); // Convert response to JSON
-        })
-        .then(data => {
-            console.log('Marked as read:', data); // Log success response
-        })
-        .catch(error => {
-            console.error('Error:', error); // Log any errors
-        });
+            // Fetch messages for this conversation
+            fetch(`/messages/conversation/${otherUserId}`)
+                .then(response => response.json())
+                .then(messages => {
+                    const conversationMessages = document.getElementById('conversationMessages');
+                    conversationMessages.innerHTML = ''; // Clear previous messages
 
-        // Fetch messages for this conversation
-        fetch(`/messages/conversation/${otherUserId}`)
-            .then(response => response.json())
-            .then(messages => {
-                const conversationMessages = document.getElementById('conversationMessages');
-                conversationMessages.innerHTML = ''; // Clear previous messages
+                    messages.forEach(message => {
+                        const fullName = `${message.sender.first_name} ${message.sender.middle_name || ''} ${message.sender.last_name} ${message.sender.suffix || ''}`.trim();
+                        const senderName = message.sender_id === authUserId ? 'You' : fullName;
 
-                messages.forEach(message => {
-                    const messageItem = document.createElement('li');
-                    messageItem.className = 'py-2';
-                    messageItem.innerHTML = ` 
-                        <strong>${message.sender_id == {{ Auth::id() }} ? 'You' : message.sender.name}:</strong> 
-                        ${message.content} 
-                        <small class="text-gray-500">${new Date(message.created_at).toLocaleString()}</small>
-                    `;
-                    conversationMessages.appendChild(messageItem);
+                        const messageItem = document.createElement('li');
+                        messageItem.className = 'py-2';
+                        messageItem.innerHTML = `
+                            <strong>${senderName}:</strong> 
+                            ${message.content} 
+                            <small class="text-gray-500">${new Date(message.created_at).toLocaleString()}</small>
+                        `;
+                        conversationMessages.appendChild(messageItem);
+                    });
+
+                    document.getElementById('messageModal').classList.remove('hidden'); // Show modal
+                    // Scroll to the bottom of the messages
+                    conversationMessages.scrollTop = conversationMessages.scrollHeight;
                 });
-
-                document.getElementById('messageModal').classList.remove('hidden'); // Show modal
-                // Scroll to the bottom of the messages
-                conversationMessages.scrollTop = conversationMessages.scrollHeight;
-            });
-        }   
+        }
 
         function closeInboxModal() {
             document.getElementById('messageModal').classList.add('hidden'); // Hide modal

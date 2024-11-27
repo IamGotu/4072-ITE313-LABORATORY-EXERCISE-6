@@ -33,7 +33,7 @@ class MessageController extends Controller
     
             $formattedConversations[] = [
                 'otherUserId' => $otherUser->id,
-                'otherUserName' => $otherUser->name,
+                'otherUserName' => trim("{$otherUser->first_name} {$otherUser->middle_name} {$otherUser->last_name} {$otherUser->suffix}"),
                 'latestMessage' => $latestMessage,
             ];
         }
