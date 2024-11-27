@@ -4,6 +4,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\FriendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -51,6 +52,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/friends/cancel/{friendId}', [FriendController::class, 'cancelFriendRequest'])->name('friends.cancel');
     Route::post('/friends/accept/{friendId}', [FriendController::class, 'acceptFriend'])->name('friends.accept');
     Route::delete('/friends/decline/{friendId}', [FriendController::class, 'declineFriendRequest'])->name('friends.decline');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::get('messages/conversation/{userId}', [MessageController::class, 'getConversation'])->name('messages.conversation');
+    Route::get('/messages', [MessageController::class, 'index'])->name('messages');
+    Route::post('messages/send', [MessageController::class, 'send'])->name('messages.send');
+    Route::delete('/messages/{id}/delete', [MessageController::class, 'deleteMessage']);
+    Route::post('/messages/conversation/{id}/read', [MessageController::class, 'markAsRead'])->name('messages.markAsRead');
+    Route::get('messages/retrieve/{userId}', [MessageController::class, 'retrieve'])->name('messages.retrieve');
+    Route::get('search', [MessageController::class, 'search'])->name('messages.search');
 });
 
 // Optional: API routes if needed

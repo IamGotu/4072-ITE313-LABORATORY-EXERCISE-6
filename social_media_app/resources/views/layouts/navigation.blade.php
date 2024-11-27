@@ -30,6 +30,13 @@
                         {{ __('Notifications') }}
                     </x-nav-link>
                 </div>
+
+                <!-- Messages Links -->
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('messages')" :active="request()->routeIs('messages')" class="text-gray-800 hover:text-blue-600">
+                        {{ __('Messages') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
