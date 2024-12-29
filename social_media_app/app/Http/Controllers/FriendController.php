@@ -29,7 +29,7 @@ class FriendController extends Controller
         $outgoingRequests = $user->friendRequestsSent;
         
         // Friends (confirmed friendships)
-        $friends = $user->friends()->wherePivot('status', 'confirmed')->get(); // Get confirmed friends
+        $friends = $user->friends()->wherePivot('status', 'friend')->get(); // Get confirmed friends
         
         // Return the view with all variables
         return view('friends', compact('suggestedFriends', 'incomingRequests', 'outgoingRequests', 'friends'));
@@ -59,7 +59,7 @@ class FriendController extends Controller
         $user = Auth::user();
         
         // Check if the user is friends with the given friendId
-        $friendship = $user->friends()->where('friend_id', $friendId)->wherePivot('status', 'confirmed')->first();
+        $friendship = $user->friends()->where('friend_id', $friendId)->wherePivot('status', 'friend')->first();
 
         if ($friendship) {
             // Remove the friend from the relationship
@@ -89,22 +89,28 @@ class FriendController extends Controller
     public function acceptFriend($friendId)
     {
         $user = Auth::user();
-        
-        // Check if the logged-in user has received a pending friend request from the other user
-        $friendship = $user->friendRequestsReceived()->where('user_id', $friendId)->wherePivot('status', 'pending')->first();
+    
+        // Check if there is a pending friend request
+        $friendship = $user->friendRequestsReceived()
+            ->where('user_id', $friendId)
+            ->wherePivot('status', 'pending')
+            ->first();
     
         if ($friendship) {
-            // Accept the friend request by updating the pivot table's 'status' to 'confirmed'
-            $friendship->pivot->update(['status' => 'confirmed']);
-            
-            // Also check the outgoing request on the other user's side (to update their view of the relationship)
-            $sentFriendship = $user->friendRequestsSent()->where('friend_id', $friendId)->wherePivot('status', 'pending')->first();
-            
-            // If the outgoing request is found, update the status to 'confirmed'
-            if ($sentFriendship) {
-                $sentFriendship->pivot->update(['status' => 'confirmed']);
+            // Update the incoming friendship request to 'friend'
+            $user->friendRequestsReceived()
+                ->updateExistingPivot($friendId, ['status' => 'friend', 'updated_at' => now()]);
+    
+            // Ensure the reciprocal friendship also exists and is updated to 'friend'
+            $reciprocalFriendship = $user->friends()->where('friend_id', $friendId)->exists();
+            if ($reciprocalFriendship) {
+                // Update reciprocal record to 'friend'
+                $user->friends()->updateExistingPivot($friendId, ['status' => 'friend', 'updated_at' => now()]);
+            } else {
+                // Create the reciprocal friendship if it doesn't exist
+                $user->friends()->attach($friendId, ['status' => 'friend', 'created_at' => now(), 'updated_at' => now()]);
             }
-            
+    
             // Notify the sender that their request was accepted
             $sender = User::find($friendId);
             $sender->notify(new FriendRequestAcceptedNotification($user));
@@ -112,10 +118,10 @@ class FriendController extends Controller
             return redirect()->back()->with('message', 'Friend request accepted.');
         }
     
-        // If no incoming friend request was found
+        // If no pending request was found
         return redirect()->back()->with('error', 'Friend request not found.');
-    }    
-                                
+    }
+                                        
     public function declineFriendRequest($friendId)
     {
         $user = Auth::user();
