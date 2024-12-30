@@ -1,11 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="bg-blue-600 p-4 rounded-t-lg shadow-md">
-            <h2 class="text-white text-2xl font-semibold">
-                {{ __('Notifications') }}
-            </h2>
-        </div>
-    </x-slot>
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-6">
         <div class="bg-white p-6 rounded-lg shadow-md">
