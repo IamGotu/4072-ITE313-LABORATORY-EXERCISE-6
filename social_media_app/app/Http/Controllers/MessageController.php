@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
-use App\Models\Conversation;
 use App\Models\User;
 use App\Events\NewMessage;
 use Illuminate\Http\Request;
@@ -64,21 +63,6 @@ class MessageController extends Controller
         return redirect()->route('messages')->with('message', 'Message sent successfully');
     }
 
-    public function markAsRead($id)
-    {
-        // Assuming $id is the conversation ID or the user ID of the other participant
-        $conversation = Conversation::where('user_id', Auth::id())
-                                    ->where('other_user_id', $id)
-                                    ->first();
-
-        if ($conversation) {
-            // Mark the conversation as read (implement your logic here)
-            $conversation->read_by_users()->attach(Auth::id()); // Example of a many-to-many relationship
-        }
-
-        return response()->json(['success' => true]);
-    }
-
     public function retrieve($userId)
     {
         // Retrieve messages between the authenticated user and another user
@@ -132,50 +116,6 @@ class MessageController extends Controller
         return redirect()->back()->with('error', 'You are not authorized to delete this message.');
     }
 
-    public function startConversation($userOneId, $userTwoId)
-    {
-        // Check if the conversation already exists
-        $conversation = Conversation::where(function ($query) use ($userOneId, $userTwoId) {
-            $query->where('user_one_id', $userOneId)
-                ->where('user_two_id', $userTwoId);
-        })->orWhere(function ($query) use ($userOneId, $userTwoId) {
-            $query->where('user_one_id', $userTwoId)
-                ->where('user_two_id', $userOneId);
-        })->first();
-
-        if (!$conversation) {
-            // Create a new conversation
-            $conversation = Conversation::create([
-                'user_one_id' => $userOneId,
-                'user_two_id' => $userTwoId,
-            ]);
-        }
-
-        return $conversation;
-    }
-
-    public function deleteConversation($conversationId)
-    {
-        $conversation = Conversation::find($conversationId);
-        $userId = Auth::id();
-
-        // Check if the user is user_one or user_two
-        if ($conversation->user_one_id == $userId) {
-            $conversation->deleted_by_user_one = true;
-        } elseif ($conversation->user_two_id == $userId) {
-            $conversation->deleted_by_user_two = true;
-        }
-
-        $conversation->save();
-
-        // If both users have deleted the conversation, delete it from the database
-        if ($conversation->deleted_by_user_one && $conversation->deleted_by_user_two) {
-            $conversation->delete();
-        }
-
-        return response()->json(['message' => 'Conversation deleted for this user.']);
-    }
-
     public function deleteMessage($messageId)
     {
         $userId = Auth::id();
@@ -202,6 +142,4 @@ class MessageController extends Controller
 
         return response()->json(['success' => true]);
     }
-
-
 }

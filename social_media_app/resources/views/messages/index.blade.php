@@ -64,6 +64,7 @@
                                     <p class="text-gray-600">{{ $conversation['latestMessage']->content ?? 'No messages' }}</p>
                                     <small class="text-gray-500">{{ $conversation['latestMessage']->created_at->diffForHumans() ?? 'N/A' }}</small>
                                 </div>
+                                <!-- temporary remove
                                 <div>
                                     <button 
                                         onclick="openDeleteModal('{{ $conversation['latestMessage']->id ?? '' }}', this)" 
@@ -71,6 +72,7 @@
                                         Delete
                                     </button>
                                 </div>
+                                -->
                             </li>
                         @empty
                             <li class="p-4">No messages in your inbox.</li>
