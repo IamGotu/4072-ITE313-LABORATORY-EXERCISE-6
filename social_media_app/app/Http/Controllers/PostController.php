@@ -23,7 +23,7 @@ class PostController extends Controller
         $post = Post::create([
             'content' => $request->content,
             'visibility' => $request->visibility,
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
         ]);
     
         return response()->json($post, 201);
@@ -64,7 +64,7 @@ class PostController extends Controller
                     return true; // Everyone can see public posts
                 case 'Friends':
                     // Check if the authenticated user is a confirmed friend of the post owner
-                    return $post->user->friends()->where('friend_id', $authUserId)->where('status', 'confirmed')->exists();
+                    return $post->user->friends()->where('friend_id', $authUserId)->where('status', 'friend')->exists();
                 case 'Only me':
                     return false; // Only the post owner can see "only me" posts
                 default:
