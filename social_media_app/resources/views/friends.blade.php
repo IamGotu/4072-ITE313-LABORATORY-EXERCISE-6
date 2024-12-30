@@ -49,12 +49,28 @@
                     @foreach($suggestedFriends as $suggested)
                         <li class="flex justify-between items-center p-2 border-b">
                             <span>{{ $suggested->first_name }} {{ $suggested->middle_name }} {{ $suggested->last_name }} {{ $suggested->suffix }}</span>
-                            <form method="POST" action="{{ route('friends.add', $suggested->id) }}">
-                                @csrf
-                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-2">
-                                    {{ __('Add Friend') }}
-                                </button>
-                            </form>
+
+                            @php
+                                $outgoingRequest = Auth::user()->friendRequestsSent()->where('friend_id', $suggested->id)->exists();
+                            @endphp
+
+                            @if($outgoingRequest)
+                                <!-- Cancel Friend Request Button -->
+                                <form method="POST" action="{{ route('friends.cancel', $suggested->id) }}">
+                                    @csrf
+                                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg mt-2">
+                                        Cancel Friend Request
+                                    </button>
+                                </form>
+                            @else
+                                <!-- Add Friend Button -->
+                                <form method="POST" action="{{ route('friends.add', $suggested->id) }}">
+                                    @csrf
+                                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-2">
+                                        Add Friend
+                                    </button>
+                                </form>
+                            @endif
                         </li>
                     @endforeach
                 </ul>

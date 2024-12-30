@@ -73,19 +73,19 @@ class FriendController extends Controller
     public function cancelFriendRequest($friendId)
     {
         $user = Auth::user();
-        
-        // Check if the friend request exists and the status is 'pending'
-        $friendship = $user->friends()->where('friend_id', $friendId)->first();
-
+    
+        // Check if a pending friend request exists
+        $friendship = $user->friendRequestsSent()->where('friend_id', $friendId)->first();
+    
         if ($friendship && $friendship->pivot->status === 'pending') {
-            // Delete the pending friend request
-            $user->friends()->detach($friendId);
+            // Delete the pending friend request (cancel the request)
+            $user->friendRequestsSent()->detach($friendId);
             return redirect()->back()->with('message', 'Friend request cancelled.');
         }
-
+    
         return redirect()->back()->with('error', 'No pending friend request found.');
     }
-
+    
     public function acceptFriend($friendId)
     {
         $user = Auth::user();
